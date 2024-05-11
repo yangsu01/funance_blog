@@ -1,3 +1,10 @@
+### v1.1.1 (10-05-2024)
+
+- Removed login requirement to view certain pages
+- Added search, sort, and filter options to games list
+- Updated backend validation (thanks _stockmaster_ and _woriy96668_)
+  <br> <br>
+
 ### v1.1.0 (02-05-2024)
 
 - Added blog catalog and blog posts
