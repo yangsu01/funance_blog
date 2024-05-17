@@ -1,3 +1,13 @@
+### v1.1.2 (14-05-2024)
+
+- Added filtering options for leaderboard plots
+- Updated daily plots to show % growth instead of portfolio value
+- Updated calculations from 2 decimal places to 4... (Thanks _piyewe74_)
+- Fixed bug where user was unable to join game
+- Fixed bug where user was unable to create games with no transaction fees
+- Fixed line plot x axis units displayed
+  <br> <br>
+
 ### v1.1.1 (10-05-2024)
 
 - Removed login requirement to view certain pages
