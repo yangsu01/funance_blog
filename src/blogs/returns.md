@@ -1,4 +1,4 @@
-Its finally here, Funance Blog Vol.1!!! Before we start looking at anything fancy, we should start with the basics and build out way up (its totally not because I haven't done any analytics stuff in a few years and need a refresher...).
+It's finally here, Funance Blog Vol.1!!! Before we start looking at anything fancy, we should start with the basics and build our way up (it's totally not because I haven't done any analytics stuff in a few years and need a refresher...).
 
 Thus for the inaugural blog of Funance Blog, we will be looking at... Returns! and how we can use it to evaluate investments.
 
@@ -16,7 +16,7 @@ Cool... but what does that really mean? Lets **_visualize_**.
 
 ### 1.1 Close vs Adjusted Close
 
-First we choose a stock, lets do `TSM (Taiwan Semiconductor Manufacturing Company)`. Using _yfinance_ we can download the historical data over the last 10 years, which looks something like this
+First, we choose a stock, let's do `TSM (Taiwan Semiconductor Manufacturing Company)`. Using _yfinance_ we can download the historical data over the last 10 years, which looks something like this
 
 <img src="./figures/returns/tsm-historical-data.jpg" alt="downloaded TSM data" class="img-fluid" /> <br>
 Figure 1: Historical Prices of TSM
@@ -28,9 +28,9 @@ Figure 2: Close vs Adjusted Close Prices of TSM
 
 While the closing price is the share price of the last transaction before market close, the adjusted closing price is, well, adjusted 🤯. It factors in any corporate actions and adjusts the price accordingly. This includes dividend payouts, stock splits, and more (probably).
 
-Suppose at the end of a trading day, the company announces a dividend payout of 1%. If the stock is priced at $100 per share at market close, the closing price would be recorded as such, $100. The adjusted closing price on the other hand, would be $99 since that $1 (1%) has been paid out.
+Suppose at the end of a trading day, the company announces a dividend payout of 1%. If the stock is priced at $100 per share at market close, the closing price would be recorded as such, $100. The adjusted closing price, on the other hand, would be $99 since that $1 (1%) has been paid out.
 
-So as we can see, adjusted close is a better indicator the actual value of the stock and we will be using it moving forward.
+So as we can see, adjusted close is a better indicator of the actual value of the stock and we will be using it moving forward.
 
 ### 1.2 Returns
 
@@ -43,9 +43,9 @@ Alright, we're getting somewhere. Doing a quick visual analysis, we can infer so
 
 - The returns seem to be balanced around 0%, meaning on average, we can expect a daily return close to that.
 - Comparing the time periods before and after 2020, we can see more extremes in the latter. This suggests that the period after 2020 has higher volatility, what a surprise...
-- Looking at the largest peaks, we can identify periods of unusual market behavior. Look at the lowest peaks in early 2020 as well as the the high peaks right after, its almost like the market crashed due to some real world event but quickly bounced back after some kind of stimulus. wow.
+- Looking at the largest peaks, we can identify periods of unusual market behavior. Look at the lowest peaks in early 2020 as well as the high peaks right after, it's almost like the market crashed due to some real-world event but quickly bounced back after some kind of stimulus. wow.
 
-Lets go one step further by organizing the data a bit more:
+Let's go one step further by organizing the data a bit more:
 
 <img src="./figures/returns/tsm-returns-histogram.png" alt="TSM returns histogram" class="img-fluid" /> <br>
 Figure 4. Histogram of TSM Returns
@@ -81,7 +81,7 @@ Where $\bar{R}$ is the average returns over $N$ periods.
 
 Using this formula on the 2 stocks, if I did my math correctly, we get `Stock 1 Returns = 10% (annually)` and `Stock 2 Returns = -2.2% (annually)`. _W O W_
 
-Another reason why investing early in diversified index funds almost always out performs investing in highly volatile stocks in the _long term_.
+Another reason why investing early in diversified index funds almost always outperforms investing in highly volatile stocks in the _long term_.
 
 Ok, going back to _TSM_, we find the the actual `average daily return of TSM = 0.0957%` which we can annualize by just multiplying the daily returns by itself _252_ times (we assume the market is open 252 days a year)
 
@@ -89,11 +89,11 @@ $$
     \bar{R}^A = (1 + \bar{R}^D)^{252} - 1 \quad (3)
 $$
 
-Where $\bar{R}^A$ is the average annual returns and $\bar{R}^D$ is the average daily return.
+Where $\bar{R}^A$ is the average annual return and $\bar{R}^D$ is the average daily return.
 
 This is why it is common to use _log returns_ instead of just returns in a lot of analysis, we can utilize the additive property of logarithms to further simplify the calculations. But that is another tangent for another day (foreshadowing...)
 
-Plugging everything in, we find `average annual return of TSM = 27.2679%`. Thats pretty good. Wouldn't expect anything less from a tech (related) stock.
+Plugging everything in, we find the `average annual return of TSM = 27.2679%`. That's pretty good. Wouldn't expect anything less from a tech (related) stock.
 
 ## 2 Using Returns to Evaluate Stocks
 
@@ -119,10 +119,10 @@ Looking at the daily returns of each stock...
 <img src="./figures/returns/tsm-aapl-coke-returns.png" alt="TSM AAPL COKE returns" class="img-fluid" /> <br>
 Figure 6: Daily Returns of TSM, AAPL, COKE
 
-We can see similar behaviors of all 3 stocks. Its hard to judge which one has better performance and/or volatility. I probably should have chosen other stocks,
-but its 11pm rn...
+We can see similar behaviors in all 3 stocks. It's hard to judge which one has better performance and/or volatility. I probably should have chosen other stocks,
+but it's 11 pm rn...
 
-Lets look at the metrics of average returns and volatility... Using the equations defined above, we get:
+Let's look at the metrics of average returns and volatility... Using the equations defined above, we get:
 
 | Stock | Annual Returns | Annualized Volatility |
 | :---: | :------------: | :-------------------: |
@@ -132,34 +132,34 @@ Lets look at the metrics of average returns and volatility... Using the equation
 
 Table 2: Average annual returns and volatility of TSM, AAPL, COKE
 
-Yea I definitely should have chosen different stocks.
+Yeah I definitely should have chosen different stocks.
 
 Investing is a game of balancing potential returns and volatility. The higher the risk, the higher the potential rewards (I know, mindblowing). Depending on the risk the investor wants to take, an optimized portfolio can be constructed by maximizing the potential returns at that risk (insert blog on Markowitz's Portfolio Theory here...)
 
-Looking at returns is a simple way of optimizing a portfolio. Suppose you want to construct a portfolio with a maximum of 30% volatility. ie, you are willing to accept a decrease of 30% of your total portfolio value in a year. If you had to choose between the 3 stocks above for the investment, which would you choose? _COKE_ offers the highest potential returns but is too risky for you. There is no clear winner among _TSM_ and _AAPL_, so you choice depends on whether you want to maximize returns or minimize risk... But if we also had another choice of a stock with say, `15% returns and 29% volatility`. you could automatically rule it out as there are options that offer better returns for similar risk.
+Looking at returns is a simple way of optimizing a portfolio. Suppose you want to construct a portfolio with a maximum of 30% volatility. ie, you are willing to accept a decrease of 30% of your total portfolio value in a year. If you had to choose between the 3 stocks above for the investment, which would you choose? _COKE_ offers the highest potential returns but is too risky for you. There is no clear winner among _TSM_ and _AAPL_, so your choice depends on whether you want to maximize returns or minimize risk... But if we also had another choice of a stock with say, `15% returns and 29% volatility`. you could automatically rule it out as there are options that offer better returns for similar risk.
 
 All of this is assuming that the past behaves like the future. And while this is not always true, history often repeats itself in the long term.
 
 ### 2.1 Correlation between stocks
 
-Another way of lowering risk is through diversification. A stock I own might tank cause their CEO got cancelled (unlucky), but if I invested in 20 different stocks, ain't no way all of them end up tanking right? Its just as simple as that, more diversification, less impact of tanking stocks on you overall portfolio.
+Another way of lowering risk is through diversification. A stock I own might tank cause their CEO got canceled (unlucky), but if I invested in 20 different stocks, ain't no way all of them end up tanking right? It's just as simple as that, more diversification, less impact of tanking stocks on your overall portfolio.
 
 Well if you want to decrease your overall risk even more, we can look at... Correlation of returns! Now look at this plot
 
 <img src="./figures/returns/tsm-aapl-coke-correlation.png" alt="TSM AAPL COKE correlation" class="img-fluid" /> <br>
-Figure 6: Correlation Matrix of TSM, AAPL, COKE
+Figure 7: Correlation Matrix of TSM, AAPL, COKE
 
 Out of the 3 stocks, which 2 would you select to construct the most 'diversified' portfolio?
 
-Well, if `Correlation > 0` means the two stocks have a positive relationship (if one goes up, the other will likely go up too) with the higher the number, the stronger the correlation (1 means they're literally the same stock). And `Correlation < 0` means the two stocks have a negative relationship, then we probably want to select stocks with a correlation value close to 0. That would be _COKE_ and _TSM_ in our example.
+Well, if `Correlation > 0` means the two stocks have a positive relationship (if one goes up, the other will likely go up too) the higher the number, the stronger the correlation (1 means they're literally the same stock). And if `Correlation < 0` means the two stocks have a negative relationship, then we probably want to select stocks with a correlation value close to 0. That would be _COKE_ and _TSM_ in our example.
 
-Note the correlation between _TSM_ and _AAPL_ is quite high, suggesting that the 2 stocks have similar price changes. That makes a lot of sense considering Apple is one of the biggest costumers of TSMC, and TSMC makes almost all of Apple chips.
+Note the correlation between _TSM_ and _AAPL_ is quite high, suggesting that the 2 stocks have similar price changes. That makes a lot of sense considering Apple is one of the biggest customers of TSMC, and TSMC makes almost all of Apple chips.
 
 ## 3 Conclusion
 
-Thats all folks, hopefully you have learned something reading this Vol.1 of Funance Blog. I'm surprise you finished it (or maybe skipped to the end...)
+That's all folks, hopefully, you have learned something reading this Vol.1 of Funance Blog. I'm surprised you finished it (or maybe skipped to the end...)
 
-In this blog, we looked at how we can calculate the returns of a stock and use it to find the average returns and volatility of a given time period. Using this, we can then compare different stocks and construct simple portfolios depending on the level of risk one want to take on. Lastly, we showed how you could use the correlation between different stocks to construct diversified portfolios 🥰.
+In this blog, we looked at how we can calculate the returns of a stock and use it to find the average returns and volatility of a given time period. Using this, we can then compare different stocks and construct simple portfolios depending on the level of risk one wants to take on. Lastly, we showed how you could use the correlation between different stocks to construct diversified portfolios 🥰.
 
 If you want to play around with any of the code used in this blog, please see the [Funance Blog](https://github.com/yangsu01/funance_blog) Github repo.
 
