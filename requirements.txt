@@ -30,6 +30,7 @@ numpy==1.26.4
 packaging==24.0
 pandas==2.2.2
 parso==0.8.4
+patsy==0.5.6
 peewee==3.17.5
 pillow==10.3.0
 platformdirs==4.2.1
@@ -47,6 +48,7 @@ scipy==1.13.0
 six==1.16.0
 soupsieve==2.5
 stack-data==0.6.3
+statsmodels==0.14.2
 tornado==6.4
 traitlets==5.14.3
 typing_extensions==4.11.0
