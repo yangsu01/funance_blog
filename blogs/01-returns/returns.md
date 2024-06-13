@@ -18,17 +18,17 @@ Cool... but what does that really mean? Lets **_visualize_**.
 
 First, we choose a stock, let's do `TSM (Taiwan Semiconductor Manufacturing Company)`. Using _yfinance_ we can download the historical data over the last 10 years, which looks something like this
 
-<img src="./figures/returns/tsm-historical-data.jpg" alt="downloaded TSM data" class="img-fluid" /> <br>
+<img src="./figures/tsm-historical-data.jpg" alt="downloaded TSM data" class="img-fluid" /> <br>
 Figure 1: Historical Prices of TSM
 
 Now we can calculate the daily returns using the closing price. But notice there are 2 columns related to the closing price: `Close` and `Adj Close`. If we plot these 2 columns, we get the following:
 
-<img src="./figures/returns/tsm-adjusted-close.png" alt="TSM close vs adjusted close prices" class="img-fluid" /> <br>
+<img src="./figures/tsm-adjusted-close.png" alt="TSM close vs adjusted close prices" class="img-fluid" /> <br>
 Figure 2: Close vs Adjusted Close Prices of TSM
 
 While the closing price is the share price of the last transaction before market close, the adjusted closing price is, well, adjusted 🤯. It factors in any corporate actions and adjusts the price accordingly. This includes dividend payouts, stock splits, and more (probably).
 
-Suppose at the end of a trading day, the company announces a dividend payout of 1%. If the stock is priced at $100 per share at market close, the closing price would be recorded as such, $100. The adjusted closing price, on the other hand, would be $99 since that $1 (1%) has been paid out.
+Suppose at the end of a trading day, the company announces a dividend payout of 1%. If the stock is priced at \$100 per share at market close, the closing price would be recorded as such, \$100. The adjusted closing price, on the other hand, would be \$99 since that \$1 (1%) has been paid out.
 
 So as we can see, adjusted close is a better indicator of the actual value of the stock and we will be using it moving forward.
 
@@ -36,7 +36,7 @@ So as we can see, adjusted close is a better indicator of the actual value of th
 
 Now we can finally look at the returns. Applying equation (1) to the Adjusted Close values of TSM, we get the following plot...
 
-<img src="./figures/returns/tsm-daily-returns.png" alt="TSM daily returns" class="img-fluid" /> <br>
+<img src="./figures/tsm-daily-returns.png" alt="TSM daily returns" class="img-fluid" /> <br>
 Figure 3. Daily Returns of TSM
 
 Alright, we're getting somewhere. Doing a quick visual analysis, we can infer some results;
@@ -47,7 +47,7 @@ Alright, we're getting somewhere. Doing a quick visual analysis, we can infer so
 
 Let's go one step further by organizing the data a bit more:
 
-<img src="./figures/returns/tsm-returns-histogram.png" alt="TSM returns histogram" class="img-fluid" /> <br>
+<img src="./figures/tsm-returns-histogram.png" alt="TSM returns histogram" class="img-fluid" /> <br>
 Figure 4. Histogram of TSM Returns
 
 🤔🤔 Looks like a normal distribution centered around 0%, which confirms our earlier estimation that we can expect an average daily return close to 0%. Not really that surprising...
@@ -109,14 +109,14 @@ COKE (Coca-Cola Consolidated, Inc.)
 
 Plotting the close prices of these stocks, we get the following:
 
-<img src="./figures/returns/tsm-aapl-coke-normalized.png" alt="TSM AAPL COKE normalized close price" class="img-fluid" /> <br>
+<img src="./figures/tsm-aapl-coke-normalized.png" alt="TSM AAPL COKE normalized close price" class="img-fluid" /> <br>
 Figure 5: Normalized Price History of TSM, AAPL, and COKE
 
 Since the 3 stocks are priced at different values, we normalized the prices before plotting. As you can see, they're actually quite similar! And surprisingly, _COKE_ can keep up and even surpass the tech stocks 😮... with an over 15x increase over the last 10 years.
 
 Looking at the daily returns of each stock...
 
-<img src="./figures/returns/tsm-aapl-coke-returns.png" alt="TSM AAPL COKE returns" class="img-fluid" /> <br>
+<img src="./figures/tsm-aapl-coke-returns.png" alt="TSM AAPL COKE returns" class="img-fluid" /> <br>
 Figure 6: Daily Returns of TSM, AAPL, COKE
 
 We can see similar behaviors in all 3 stocks. It's hard to judge which one has better performance and/or volatility. I probably should have chosen other stocks,
@@ -146,7 +146,7 @@ Another way of lowering risk is through diversification. A stock I own might tan
 
 Well if you want to decrease your overall risk even more, we can look at... Correlation of returns! Now look at this plot
 
-<img src="./figures/returns/tsm-aapl-coke-correlation.png" alt="TSM AAPL COKE correlation" class="img-fluid" /> <br>
+<img src="./figures/tsm-aapl-coke-correlation.png" alt="TSM AAPL COKE correlation" class="img-fluid" /> <br>
 Figure 7: Correlation Matrix of TSM, AAPL, COKE
 
 Out of the 3 stocks, which 2 would you select to construct the most 'diversified' portfolio?

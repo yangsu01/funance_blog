@@ -38,7 +38,7 @@ Lets get into the actual interesting stuff.
 
 Opening up a quote for a bond traded on the bond market, you might see something like this
 
-![bond quote example](./figures/bonds-intro/bond-quote-example.png)
+![bond quote example](./figures/bond-quote-example.png)
 _Figure 1. Example Bond Quote (source [CNBC](https://www.cnbc.com/quotes/CA3Y-CA))_
 
 This is one way it can be shown, in a similar layout to stock quotes. I've also seen it presented in a bond table (I found it kinda hard to find real-time bond prices when researching for this post...). Regardless of how it is presented, the core information stays the same:
@@ -65,7 +65,7 @@ $$
 
 Pretty self explanatory equation. If you buy the bond when it was issued or after an interest payment has been made, $P_{dirty} = P_{clean}$. But if you buy it any other time, you would need to pay the bondholder the current price plus any interest that has been generated since the last period. Heres the cash flows:
 
-![zero coupon bond vs coupon bond cashflow](./figures/bonds-intro/zero-coupon-vs-coupon.png)
+![zero coupon bond vs coupon bond cashflow](./figures/zero-coupon-vs-coupon.png)
 _Figure 2. Cash Flow of Zero Coupon Bond and Coupon Bond_
 
 Yup, that matches up exactly with the definitions we gave before. Do note that the zero coupon bond is bought at a higher discount to par, which is what generates the yield. On the other hand, the coupon bond is bought at a price close to par, as its yield is primarily generated through the coupon payouts.
@@ -104,7 +104,7 @@ As you can see, the values are very similar. There are differences though, likel
 
 Now that we have the yields, we can plot it as a function of bond maturity to obtain the... `Yield Curve`. For Canadian government bonds, it currently looks something like this:
 
-![Canadian government bond yield curve](./figures/bonds-intro/bond-yield-curve.png)
+![Canadian government bond yield curve](./figures/bond-yield-curve.png)
 _Figure 3. Yield Curve of Canadian Government Bonds_
 
 **_Uh Oh_**. Normally, we would expect shorter-term bonds to have lower yields than longer-term bonds. Since the shorter the maturity, the lower the risk. But in our case, we see the opposite, an _inverted yield curve_. This usually means... **recession**.
@@ -149,7 +149,7 @@ Convexity approximates the curvature in the relationship and is a more accurate 
 
 Lets apply this to the Canadian government bonds we've been looking at.
 
-![Duration and Convexity of Canadian Government Bonds](./figures/bonds-intro/duration-convexity.png)
+![Duration and Convexity of Canadian Government Bonds](./figures/duration-convexity.png)
 _Figure 3. Price Change at Different Maturities for a 1% Increase in Yield_
 
 From the plot we observe an increase in price change as the maturity of the bond increases. This matches our intuition as longer maturity bonds are more sensitive to interest rates.
