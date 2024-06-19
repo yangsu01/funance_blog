@@ -1,6 +1,6 @@
 Alright, no more theory, just applications. Lets see if we can make any money using ARIMA models...
 
-This is a continuation of the previous post: [_Time Series Analysis: ARIMA Models_](https://www.funance.lol/blog/2oH7rZlN6SorUF88mjEX9H/time-series-arima). All the theory used in this blog regarding ARIMA models can be found there.
+This is a continuation of the previous post: [_Time Series Analysis: ARIMA Models_](https://www.funance.lol/blog/2oH7rZlN6SorUF88mjEX9H/time-series-arima). The theory used in this blog regarding ARIMA models can be found there.
 
 Suppose you are going to invest $100 in some stock. What investment strategy would yield the greatest returns? To be consistent, we will also be testing our strategies on the same stocks over the same time period. The tickers I chose are:
 
@@ -27,7 +27,7 @@ _Figure 1. Buy at the Beginning and Sell at the End_
 
 In the figure, the red dotted line is where we bought the stock, the green dotted line is where we sold the stock, and the green shaded area is the period we held the stock (it will be red if the return over that period is negative). All following plots will follow this format. Sorry if you're red-green colorblind.
 
-Damn, thats pretty good returns though. Considering the time-frame is just over a month and a half. 13% returns for NASDAQ? Geez. Tech stocks are really flying.
+Damn, that's pretty good returns though. Considering the time frame is just over a month and a half. 13% returns for NASDAQ? Geez. Tech stocks are flying.
 
 ### 1.2 Panic Buy, Panic Sell
 
@@ -66,7 +66,7 @@ _Figure 4. Buy when Positive Returns are Forecasted, Sell when Negative_
 ![arima forecast 2](./figures/arima-2.png)
 _Figure 5. Buy when Returns above 0.1% are Forecasted, Sell Next Day_
 
-Yikes. On first glance, we're not looking good. Heres all the info summed up in a table...
+Yikes. At first glance, we're not looking good. Here's all the info summed up in a table...
 
 | Investing Strategy                   | ^RUT  | ^IXIC | QBTS  |  VZ   |
 | :----------------------------------- | :---: | :---: | :---: | :---: |
@@ -80,31 +80,37 @@ Yikes. On first glance, we're not looking good. Heres all the info summed up in 
 
 _Table 1. Returns of Different Investment Strategies. Note: Forecast refers to Forecasted Returns_
 
-Wow thats bad. The only redeeming aspect of the forecast strategies is it decreased the loss from holding QBTS. But aside from that, buying and holding stocks that have an upwards historical trend is definitely the way to go.
+Wow, that's pretty bad. The only redeeming aspect of the forecast strategies is they decreased the loss from holding QBTS. But aside from that, buying and holding stocks that have an upward historical trend is definitely the way to go.
 
-Note, this is only a very small sample of tickers and I've only ran each model once. But I think its pretty reasonable to conclude that you cant just fit an ARIMA model on a stock's price and expect to beat the market (unless I'm doing it wrong??).
+Note: this is only a very small sample of tickers and I've only ran each model once. But I think it's pretty reasonable to conclude that you can't just fit an ARIMA model on a stock's price and expect to beat the market (unless I'm doing something wrong??).
 
 ## 3 Improved(?) ARIMA Strategies
 
 The question now is: Can we improve the results we just got?
 
-Well, theres nothing we can do about the limitations of ARIMA models, namely assuming the fact that our data has a linear relationship between values, constant variance, and constant covariance. So in order to improve the results, we need to... get better data!
+Well, there's nothing we can do about the limitations of ARIMA models, namely assuming the fact that our data has a linear relationship between values, constant variance, and constant covariance. So to improve the results, we need to... get better data!
 
-While models trained on most stocks wont do well, theres got to be at least some that are decent right?? Thats the first thing we can improve upon. By looking at the accuracy of the predictions, we can select stocks which historically have been good for ARIMA forecasting.
+While models trained on most stocks won't do well, there's got to be at least some that are decent right?? That's the first thing we can improve upon. By looking at the accuracy of the predictions, we can select stocks that historically have been good for ARIMA forecasting.
 
-We can also try and improve upon our existing forecasting methods. Previously, we found the 'optimal' ARIMA orders by fitting a bunch of models on the training data and selecting the model with minimized AIC. Then, the rolling forecasts were all done by fitting a model with the same order. However, this may not always be the case since our dataset is changes between each forecast.
+We can also try and improve upon our existing forecasting methods. Previously, we found the 'optimal' ARIMA orders by fitting a bunch of models on the training data and selecting the model with minimized AIC. Then, the rolling forecasts were all done by fitting a model with the same order. However, this may not always be the case since our dataset updates between each forecast.
 
 Taking these points into account, here is the updated process I will follow _(inspired by this [video](https://youtu.be/8jY675fjUWo?si=waxj-8jqyuBBAokL))_
 
 1. **Create a list of candidate stocks**. The more the merrier but I chose 60 different stocks to begin with.
-2. **For each stock, back test model on historical data**. In my case, I chose to use the last 3 years of historical data. Each model was fitted 50 times on slightly different data (I shifted the time frame forward each iteration)
+2. **For each stock, backtest model on historical data**. In my case, I chose to use the last 3 years of historical data. Each model was fitted 50 times on slightly different data (I shifted the time frame forward each iteration)
 3. **Find stocks with the best results**. The criteria I used was the percentage of actual prices that fell within the 95% confidence interval of each forecast.
 4. **Rolling forecasts**. Only forecast if a model could be fit. For consistency, I also spliced the training dataset to make sure each forecast was fitted on data of the same length.
    1. For each new set of data, find the optimal ARIMA order to use for the model.
 5. **Implement Investing Strategy**. Buy or sell stocks depending on forecasted returns. I tested two strategies: buy when forecasted returns are positive and buy when forecasted returns are above 0.01% (sell next day for both).
 6. **Profit**. Hopefully...
 
-Heres the results:
+Using this method, here are the stocks that were selected as good candidates and their corresponding testing results:
+
+`META`: Meta Platforms Inc
+
+`MNST`: Monster Beverage Corp
+
+`NFLX`: Netflix Inc
 
 ![refined arima 1](./figures/refined-arima-1.png)
 _Figure 6. ARIMA Forecasting Investing Performance for META_
@@ -129,12 +135,12 @@ _Table 1. Returns of Different Strategies (Using Improved Stock Selection Proces
 
 Still, this is a pretty small sample size, but its good enough for now. We can definitely observe a better performance than our previous methods.
 
-There are things we can still tweak such as the candidate ticker selection process (what criteria to use), size of the training datasets, and specific buy/sell conditions... But I'll leave that to you, the reader (if ur interested).
+There are things we can still tweak such as the candidate ticker selection process (what criteria to use), the size of the training datasets, and specific buy/sell conditions... But I'll leave that to you, the reader (if ur interested).
 
 ## 4 Conclusions
 
 Would I invest my own money using ARIMA forecasting? NO. But hey, at least I had FUN working on this post and hopefully you had fun reading it ❤️.
 
-In this blog, we tried to implement investing strategies using ARIMA models. After getting unsatisfying results, we then tried to refine the methodology to see if better results are possible.
+In this blog, we tried to implement investing strategies using ARIMA models. After getting unsatisfying results, we then tried to refine the methodology to see if better results were possible.
 
 As always, all the code used in this post can be found on [Github](https://github.com/yangsu01/funance_blog/tree/main/blogs/04-trading-with-arima).
