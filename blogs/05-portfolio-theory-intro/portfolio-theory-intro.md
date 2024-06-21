@@ -1,10 +1,10 @@
-This week, we're look at Modern Portfolio Theory. Suppose you opened a TFSA (for my fellow Canadians...) cause you have some extra cash lying around. As a rational investor, what assets do you buy? How should you allocate your money to these assets? You heard from someone that you need to diversify, but what does that mean? Thats what we will try to answer today.
+This week, we're looking at Modern Portfolio Theory. Suppose you opened a TFSA (for my fellow Canadians...) cause you have some extra cash lying around. As a rational investor, what assets do you buy? How should you allocate your money to these assets? You heard from someone that you need to diversify, but what does that mean? That's what we will try to answer today.
 
-Note^1: We're gonna look at individual stocks instead of index funds and ETFs. A lot of them are constructed using the same fundamental theory that we will discuss anyways...
+Note: We're gonna look at individual stocks instead of index funds and ETFs. A lot of them are constructed using the same fundamentals that we will discuss anyways...
 
 ## 1 Portfolio Theory
 
-Modern Portfolio Theory (also called Markowitz's Portfolio Theory) was created by Harry Markowitz. Its portfolio construction method that maximizes returns for a given level of risk. Ok, thats enough history.
+Modern Portfolio Theory (also called Markowitz's Portfolio Theory) was created by Harry Markowitz. It's a portfolio construction method that maximizes returns for a given level of risk. Ok, that's enough history.
 
 As mentioned in my blog post on [returns](https://www.funance.lol/blog/3mYoAwyTNnmDODIlrTj6hx/returns), investing is a game of balancing risk with potential returns. The higher the risk, the higher the potential returns. In the context of portfolio theory, we want to maximize returns while minimizing risk. Sounds simple enough.
 
@@ -13,7 +13,7 @@ Before moving forward, we need to define two things: what is risk, and what is r
 - The `Risk` of a stock is defined as the historical annualized standard deviation, $\sigma$.
 - The `Returns` of the stock is defined as the historical annualized returns, $\mu$
 
-In this post, we will look at the underlying theory. For simplicity, I will be using made up values for hypothetical assets. In the next post (yes, I'm doing a 2 part blog again...), I will then use what we learned in this post and apply to real world data.
+In this post, we will look at the underlying theory. For simplicity, I will be using made-up values for hypothetical assets. In the next post (yes, I'm doing a 2 part blog again...), I will then use what we learned in this post and apply it to real-world data.
 
 ## 2 Portfolio of Two Assets
 
@@ -33,7 +33,7 @@ $$
 \sigma_p^2 = (\omega \sigma_1 + (1-\omega) \sigma_2)^2 \quad (2)
 $$
 
-Note this written in terms of the variance, which is just standard deviation squared. We can then expand equation (2) to get:
+Note this is written in terms of the variance, which is just standard deviation squared. We can then expand equation (2) to get:
 
 $$
 \sigma_p^2 = \omega^2 \sigma_1^2 + (1-\omega)^2 \sigma_2^2 + 2\omega(1-\omega)\sigma_{1,2} \quad (3)
@@ -45,20 +45,20 @@ $$
 \sigma_p^2 = \omega^2 \sigma_1^2 + (1-\omega)^2 \sigma_2^2 + 2\omega(1-\omega)\sigma_{1} \sigma_{2} \rho_{1,2}\quad (4)
 $$
 
-So far so good? If we now plug in all our know values into equations (1) and (4), and vary the weights, we can get a plot of portfolio standard deviation $(\sigma_p)$ as a function of expected returns $(\mu_p)$. Lets look at some special cases.
+So far so good? If we now plug in all our known values into equations (1) and (4), and vary the weights, we can get a plot of portfolio standard deviation $(\sigma_p)$ as a function of expected returns $(\mu_p)$. Lets look at some special cases.
 
-### 2.1 Risky and Risk Free Assets
+### 2.1 Risky and risk-free Assets
 
-Lets say you chose to invest in a risky asset (such as stocks) and a risk free asset (which by definition implies $\sigma_p=0$). This risk free asset could be a fixed-income security with know cashflows such as a bond where the risk is effectively zero (you can read more about bonds in this [blog](https://www.funance.lol/blog/71L1S3TkGdShKyTKbHa4Ou/bonds-intro)).
+Lets say you chose to invest in a risky asset (such as stocks) and a risk-free asset (which by definition implies $\sigma_p=0$). This risk-free asset could be a fixed-income security with know cashflows such as a bond where the risk is effectively zero (you can read more about bonds in this [blog](https://www.funance.lol/blog/71L1S3TkGdShKyTKbHa4Ou/bonds-intro)).
 
 Heres what we get if we plot the relationship between the overall portfolio's expected returns and standard deviation as we vary the weights in both assets.
 
-![1 risk free one risky](./figures/1risky-1safe.png)
+![1 risk-free one risky](./figures/1risky-1safe.png)
 _Figure 1. Possible Portfolios Constructed with 1 Risky and 1 Safe Asset_
 
 Make sure you understand this plot. Each blue point represents a possible portfolio with weights $\omega$ in the risky asset, and $(1-\omega)$ in the risky asset. Since one of our assets has $\sigma=0$, the overall standard deviation in equation (4) just becomes linear $\sigma_p = \omega \sigma_1$. So the resulting relationship between $\sigma_p$ and $\mu_p$ is also linear.
 
-Note the **maximum returns portfolio** obtained when the weight of the risky asset is 1, and the **minimum standard deviation portfolio** obtained when the weight of the risk free asset is 1. Any other weight would result in a portfolio along the dotted line.
+Note the maximum returns portfolio is obtained when the weight of the risky asset is 1, and the minimum standard deviation portfolio is obtained when the weight of the risk-free asset is 1. Any other weight would result in a portfolio along the dotted line.
 
 ### 2.2 Diversification
 
@@ -83,13 +83,13 @@ Now we have a quadratic relationship. Notice the dotted line between the minimum
 
 The efficient frontier narrows down the optimal portfolios we can construct. However, theres still an infinite number of points along the efficient frontier. Which one should we choose?
 
-## 3 Adding a Risk Free Asset to a Risky Portfolio
+## 3 Adding a risk-free Asset to a Risky Portfolio
 
-While any point along the efficient frontier is optimal, portfolio theory suggests that we can narrow it down further... to a single point. Let see how.
+While any point along the efficient frontier is optimal, portfolio theory suggests that we can narrow it down further... to a single point. Let's see how.
 
-Lets consider the portfolio of risky assets we constructed in the previous part as a whole, with an overall expected return of $\mu_p$, and standard deviation $\sigma_p$. If we then introduce a new risk free asset, the relationship between this risk free asset and 'risky asset portfolio' would be similar to _Figure 1_ where it would be a linear line connecting the points of $(0, \mu_f)$ corresponding to the risk free asset, and $(\sigma_p, \mu_p)$ corresponding to the portfolio of the 2 risky assets.
+Consider the portfolio of risky assets we constructed in the previous part as a whole, with an overall expected return of $\mu_p$, and standard deviation $\sigma_p$. If we then introduce a new risk-free asset, the relationship between this risk-free asset and 'risky asset portfolio' would be similar to _Figure 1_ where it would be a linear line connecting the points of $(0, \mu_f)$ corresponding to the risk-free asset, and $(\sigma_p, \mu_p)$ corresponding to the portfolio of the 2 risky assets.
 
-However, we also showed from _Figure 3_, that many efficient portfolios can be constructed from the 2 risky assets alone. So which point (representing a specific portfolio allocation) should we connect with the risk free asset?
+However, we also showed from _Figure 3_, that many efficient portfolios can be constructed from the 2 risky assets alone. So which point (representing a specific portfolio allocation) should we connect with the risk-free asset?
 
 Well, as rational investors, we want to maximize returns while minimizing risk. So lets select the line with the highest returns as a proportion of risk. Aka, the line representing the most 'bang for our buck'. With our particular axis setup, this could be found by maximizing the slope of the line found using:
 
@@ -101,22 +101,22 @@ This is just rise over run $(\sigma_f = 0)$, also called the `Sharpe Ratio` whic
 
 A higher Sharpe Ratio indicates that the portfolio (or asset) has higher expected returns as a proportion of risk. Knowing this, how can we find the most efficient portfolio?
 
-Going back to _Figure 3_, which portfolio (represented by a point) would produce the highest Sharpe Ratio when connected with a risk free asset (similar to _Figure 1_)?
+Going back to _Figure 3_, which portfolio (represented by a point) would produce the highest Sharpe Ratio when connected with a risk-free asset (similar to _Figure 1_)?
 
 ### 3.1 The Tangent Portfolio
 
-The answer is the point on the efficient frontier where we can draw a tangent line between the efficient frontier and risk free asset. It looks something like this.
+The answer is the point on the efficient frontier where we can draw a tangent line between the efficient frontier and risk-free asset. It looks something like this.
 
 ![tangent portfolio](./figures/tangent-portfolio.png)
-_Figure 4. Capital Market Line and Tangent Portfolio Constructed with 2 Risk and 1 Risk Free Asset_
+_Figure 4. Capital Market Line and Tangent Portfolio Constructed with 2 Risk and 1 risk-free Asset_
 
-From the figure above, the line that we were able to draw which maximized the Sharpe Ratio is called the `Capital Market Line (CML)` and the tangent point where the CML meets the Efficient Frontier is the `Tangent Portfolio`. The tangent portfolio can be though of as the portfolio with asset allocations that offers the highest expected returns as a proportion of risk.
+From the figure above, the line that we were able to draw which maximized the Sharpe Ratio is called the `Capital Market Line (CML)` and the tangent point where the CML meets the Efficient Frontier is the `Tangent Portfolio`. The tangent portfolio can be thought of as the portfolio with asset allocations that offers the highest expected returns as a proportion of risk.
 
 ### 3.2 Adjusting for Risk
 
 _Modern Portfolio Theory suggests that as a rational Investor, the optimal portfolio for a given list of risky assets IS the Tangent Portfolio._
 
-Notice how the tangent portfolio only depends on the list of risky assets we were looking to invest in, and the risk free rate of the market (the returns from a risk free asset). It does not depend on the amount of risk we are willing to take.
+Notice how the tangent portfolio only depends on the list of risky assets we were looking to invest in, and the risk-free rate of the market (the returns from a risk-free asset). It does not depend on the amount of risk we are willing to take.
 
 So how do we adjust our portfolio depending on our desired risk? By using the Capital Market Line. We can find the optimal portfolio depending on our desired returns or risk by moving along the CML. This is why if you go on an investment website such as [Canadian Couch Potato](https://canadiancouchpotato.com/model-portfolios/), the model portfolios it suggests are presented as percent stock and bond allocations. This is where the popular 80-20 or 60-40 stock-bond split comes from.
 
@@ -124,7 +124,7 @@ The individual allocations of each stock does not matter, as according to Portfo
 
 ## 4 Conclusions
 
-In this blog, we looked at the intuition behind Modern Portfolio Theory by investigating portfolio construction using 2 assets. We then showed how combining risky and risk free assets allowed us to find a tangent portfolio with the highest expected returns as a proportion of risk. Lastly, we briefly discussed how we can customize our portfolios depending on the level of risk or returns we want.
+In this blog, we looked at the intuition behind Modern Portfolio Theory by investigating portfolio construction using 2 assets. We then showed how combining risky and risk-free assets allowed us to find a tangent portfolio with the highest expected returns as a proportion of risk. Lastly, we briefly discussed how we can customize our portfolios depending on the level of risk or returns we want.
 
 The code used in this post can be found on [GitHub](https://github.com/yangsu01/funance_blog/blob/main/blogs/05-portfolio-theory-intro/portfolio-theory-intro.ipynb). In part 2 of this blog, I will apply this theory to a real basket of assets and see what portfolios we can construct. Stay tuned...
 
