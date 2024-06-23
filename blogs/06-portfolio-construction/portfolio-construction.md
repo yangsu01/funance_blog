@@ -28,7 +28,7 @@ _Table 1. Annual Expected Returns and Standard Deviation of Chosen Stocks_
 
 Damn Eli Lilly has been performing better than Microsoft... Insulin ftw.
 
-We now have the general case for the 2-asset portfolio discussed previously, so the core intuition stays the same: We are looking for the **expected returns** $\mu_p$ and **standard deviation** $\sigma_p$ of the overall portfolio. This be found using the same method as the 2-asset case. But since there are $n$ assets, we will use matrices to represent these relationships.
+We now have the general case for the 2-asset portfolio discussed previously, so the core intuition stays the same: We are looking for the **expected returns** $\mu_p$ and **standard deviation** $\sigma_p$ of the overall portfolio. This can be found using the same method as the 2-asset case. But since there are $n$ assets, we will use matrices to represent these relationships.
 
 Consider a portfolio consisting of a given list of $n$ risky assets with returns $\bm{\mu} = [\mu_1 ... \mu_N]$ and weights $\bm{\omega} = [\omega_1 ... \omega_N]$, we can find the expected returns of the overall portfolio, $\mu_p$ using:
 
@@ -234,7 +234,7 @@ _Table 3. Weight Allocation for Tangent Portfolio_
 
 Well, you saw it here first, time to short NIKE (this is a joke, don't sue me).
 
-Heres the table with all the expect returns and standard deviation of the resulting portfolios. Observe the noticeable reduction in 'risk'.
+Heres the table with all the expected returns and standard deviation of the resulting portfolios. Observe the noticeable reduction in 'risk'.
 
 | Portfolio         | $\mu$  | $\sigma$ |
 | :---------------- | :----: | :------: |
@@ -242,10 +242,10 @@ Heres the table with all the expect returns and standard deviation of the result
 | 80-20 Split       | 27.75% |  17.57%  |
 | 60-40 Split       | 21.88% |  13.18%  |
 
-_Table 4. Expect Returns and Standard Deviation of Optimal Portfolio Allocations_
+_Table 4. Expected Returns and Standard Deviation of Optimal Portfolio Allocations_
 
 ## 4 Conclusion
 
 In this post, we looked at the general case of constructing a portfolio with $n$ risky assets and a risk-free asset. We also showed how to mathematically find the efficient frontier, tangent portfolio, and capital market line for the assets.
 
-As always, the code used for this blog can be found on Github.
+As always, the code used for this blog can be found on [Github](https://github.com/yangsu01/funance_blog/blob/main/blogs/06-portfolio-construction/portfolio-construction.ipynb).
