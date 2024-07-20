@@ -209,7 +209,7 @@ While this approach would work, its quite computationally intensive since we nee
 
 #### 3.1.1 Multiple Linear Regression*
 
-This part is also optional. **TL;DR**: we will use Multiple Linear Regression to test whether $\alpha$ and $\beta$ change over time.
+This part is also optional. **TL;DR**: we can use Multiple Linear Regression to test whether $\alpha$ and $\beta$ change over time.
 
 Here is another method which requires us to only fit one model for each stock, as outlined in Chapter 7.10 of *Statistics and Finance: An Introduction* by Ruppert, D (2004).
 
@@ -217,12 +217,20 @@ We will be using `Multiple Linear Regression`. Heres a [StatQuest video](https:/
 
 Assume both $\alpha$ and $\beta$ are not constant, ie, they change overtime. For simplicity, we will assume a linear time varying relationship.
 
-While we can use a simple $y = mx + b$ to represent this, it would likely result in a very small slope $m$ which may not be statistically different from 0. This is because even if alpha and 
+While we can use a simple $y = mx + b$ to represent this relationship, it would result in a very small slope $m$ which may not be statistically different from 0 ($\Delta \alpha$ and $\Delta \beta$ are small). Instead, we can normalize the slope:
 
 $$
-\alpha_t = \alpha_0 + \alpha_1 t \quad (18)
+\alpha_t = \alpha + \gamma_{\alpha} \frac{t - (n+1)/2}{n-1} \quad (18)
 $$
 
 $$
-\alpha_t = \alpha_0 + \alpha_1 t \quad (19)
+\beta_t = \beta + \gamma_{\beta} \frac{t - (n+1)/2}{n-1} \quad (19)
+$$
+
+Where $n$ is the number of observations in our dataset, $t = 1, 2, ...n$ is the *uniform distrubution* of time, and $\gamma_{\alpha}, \gamma_{\beta}$ are the coefficients for the time dependend components of $\alpha, \beta$. So if $\gamma_{\alpha}, \gamma_{\beta} = 0$, then $\gamma_{\alpha}, \gamma_{\beta}$ are constant.
+
+Plugging equations (18) and (19) into equation (2), we get our multiple linear regression model:
+
+$$
+R' = \alpha + \gamma_{\alpha} \frac{t - (n+1)/2}{n-1} + \beta R'_M + \gamma_{\beta} \frac{t - (n+1)/2}{n-1} R'_M + \epsilon_i \quad (20)
 $$
