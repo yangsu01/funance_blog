@@ -1,0 +1,31 @@
+ticker,longName,sector,industry
+UNH,UnitedHealth Group Incorporated,Healthcare,Healthcare Plans
+GS,"The Goldman Sachs Group, Inc.",Financial Services,Capital Markets
+MSFT,Microsoft Corporation,Technology,Software - Infrastructure
+HD,"The Home Depot, Inc.",Consumer Cyclical,Home Improvement Retail
+CAT,Caterpillar Inc.,Industrials,Farm & Heavy Construction Machinery
+AMGN,Amgen Inc.,Healthcare,Drug Manufacturers - General
+V,Visa Inc.,Financial Services,Credit Services
+MCD,McDonald's Corporation,Consumer Cyclical,Restaurants
+CRM,"Salesforce, Inc.",Technology,Software - Application
+AXP,American Express Company,Financial Services,Credit Services
+AAPL,Apple Inc.,Technology,Consumer Electronics
+TRV,"The Travelers Companies, Inc.",Financial Services,Insurance - Property & Casualty
+JPM,JPMorgan Chase & Co.,Financial Services,Banks - Diversified
+HON,Honeywell International Inc.,Industrials,Conglomerates
+IBM,International Business Machines Corporation,Technology,Information Technology Services
+BA,The Boeing Company,Industrials,Aerospace & Defense
+AMZN,"Amazon.com, Inc.",Consumer Cyclical,Internet Retail
+PG,The Procter & Gamble Company,Consumer Defensive,Household & Personal Products
+CVX,Chevron Corporation,Energy,Oil & Gas Integrated
+JNJ,Johnson & Johnson,Healthcare,Drug Manufacturers - General
+MMM,3M Company,Industrials,Conglomerates
+MRK,"Merck & Co., Inc.",Healthcare,Drug Manufacturers - General
+DIS,The Walt Disney Company,Communication Services,Entertainment
+NKE,"NIKE, Inc.",Consumer Cyclical,Footwear & Accessories
+WMT,Walmart Inc.,Consumer Defensive,Discount Stores
+KO,The Coca-Cola Company,Consumer Defensive,Beverages - Non-Alcoholic
+DOW,Dow Inc.,Basic Materials,Chemicals
+CSCO,"Cisco Systems, Inc.",Technology,Communication Equipment
+VZ,Verizon Communications Inc.,Communication Services,Telecom Services
+INTC,Intel Corporation,Technology,Semiconductors
