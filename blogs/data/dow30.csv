@@ -1,31 +1,31 @@
-ticker,longName,sector,industry
-UNH,UnitedHealth Group Incorporated,Healthcare,Healthcare Plans
-GS,"The Goldman Sachs Group, Inc.",Financial Services,Capital Markets
-MSFT,Microsoft Corporation,Technology,Software - Infrastructure
-HD,"The Home Depot, Inc.",Consumer Cyclical,Home Improvement Retail
-CAT,Caterpillar Inc.,Industrials,Farm & Heavy Construction Machinery
-AMGN,Amgen Inc.,Healthcare,Drug Manufacturers - General
-V,Visa Inc.,Financial Services,Credit Services
-MCD,McDonald's Corporation,Consumer Cyclical,Restaurants
-CRM,"Salesforce, Inc.",Technology,Software - Application
-AXP,American Express Company,Financial Services,Credit Services
-AAPL,Apple Inc.,Technology,Consumer Electronics
-TRV,"The Travelers Companies, Inc.",Financial Services,Insurance - Property & Casualty
-JPM,JPMorgan Chase & Co.,Financial Services,Banks - Diversified
-HON,Honeywell International Inc.,Industrials,Conglomerates
-IBM,International Business Machines Corporation,Technology,Information Technology Services
-BA,The Boeing Company,Industrials,Aerospace & Defense
-AMZN,"Amazon.com, Inc.",Consumer Cyclical,Internet Retail
-PG,The Procter & Gamble Company,Consumer Defensive,Household & Personal Products
-CVX,Chevron Corporation,Energy,Oil & Gas Integrated
-JNJ,Johnson & Johnson,Healthcare,Drug Manufacturers - General
-MMM,3M Company,Industrials,Conglomerates
-MRK,"Merck & Co., Inc.",Healthcare,Drug Manufacturers - General
-DIS,The Walt Disney Company,Communication Services,Entertainment
-NKE,"NIKE, Inc.",Consumer Cyclical,Footwear & Accessories
-WMT,Walmart Inc.,Consumer Defensive,Discount Stores
-KO,The Coca-Cola Company,Consumer Defensive,Beverages - Non-Alcoholic
-DOW,Dow Inc.,Basic Materials,Chemicals
-CSCO,"Cisco Systems, Inc.",Technology,Communication Equipment
-VZ,Verizon Communications Inc.,Communication Services,Telecom Services
-INTC,Intel Corporation,Technology,Semiconductors
+ticker,longName,sector,industry,shortName
+UNH,UnitedHealth Group Incorporated,Healthcare,Healthcare Plans,UnitedHealth
+GS,"The Goldman Sachs Group, Inc.",Financial Services,Capital Markets,Goldman Sachs
+MSFT,Microsoft Corporation,Technology,Software - Infrastructure,Microsoft
+HD,"The Home Depot, Inc.",Consumer Cyclical,Home Improvement Retail,Home Depot
+CAT,Caterpillar Inc.,Industrials,Farm & Heavy Construction Machinery,Caterpillar
+AMGN,Amgen Inc.,Healthcare,Drug Manufacturers - General,Amgen
+V,Visa Inc.,Financial Services,Credit Services,Visa
+MCD,McDonald's Corporation,Consumer Cyclical,Restaurants,McDonald's
+CRM,"Salesforce, Inc.",Technology,Software - Application,Salesforce
+AXP,American Express Company,Financial Services,Credit Services,American Express
+AAPL,Apple Inc.,Technology,Consumer Electronics,Apple
+TRV,"The Travelers Companies, Inc.",Financial Services,Insurance - Property & Casualty,Travelers
+JPM,JPMorgan Chase & Co.,Financial Services,Banks - Diversified,JPMorgan Chase
+HON,Honeywell International Inc.,Industrials,Conglomerates,Honeywell
+IBM,International Business Machines Corporation,Technology,Information Technology Services,IBM
+BA,The Boeing Company,Industrials,Aerospace & Defense,Boeing
+AMZN,"Amazon.com, Inc.",Consumer Cyclical,Internet Retail,Amazon
+PG,The Procter & Gamble Company,Consumer Defensive,Household & Personal Products,Procter & Gamble
+CVX,Chevron Corporation,Energy,Oil & Gas Integrated,Chevron
+JNJ,Johnson & Johnson,Healthcare,Drug Manufacturers - General,Johnson & Johnson
+MMM,3M Company,Industrials,Conglomerates,3M
+MRK,"Merck & Co., Inc.",Healthcare,Drug Manufacturers - General,Merck
+DIS,The Walt Disney Company,Communication Services,Entertainment,Disney
+NKE,"NIKE, Inc.",Consumer Cyclical,Footwear & Accessories,Nike
+WMT,Walmart Inc.,Consumer Defensive,Discount Stores,Walmart
+KO,The Coca-Cola Company,Consumer Defensive,Beverages - Non-Alcoholic,Coca-Cola
+DOW,Dow Inc.,Basic Materials,Chemicals,Dow
+CSCO,"Cisco Systems, Inc.",Technology,Communication Equipment,Cisco
+VZ,Verizon Communications Inc.,Communication Services,Telecom Services,Verizon
+INTC,Intel Corporation,Technology,Semiconductors,Intel
