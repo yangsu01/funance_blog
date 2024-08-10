@@ -1,4 +1,3 @@
-import yfinance as yf
 import pandas as pd
 from sklearn.decomposition import PCA
 from statsmodels.api import add_constant, OLS
@@ -33,8 +32,7 @@ def pca(returns_df: pd.DataFrame) -> dict:
         'variance': eigenvals,
         'loadings': pd.DataFrame(
             eigenvecs, 
-            columns=tickers, 
-            index=[f'PC{i+1}' for i in range(len(tickers))]
+            columns=tickers
         )
     }
     
