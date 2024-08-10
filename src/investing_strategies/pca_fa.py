@@ -55,13 +55,17 @@ def pca_fa(
     
     expected_returns = []
     betas = [] # used for calculating covariance matrix
+    alphas = [] # intercepts of regression
     mse = [] # mean squared error of regression
     x = monthly_factors[['Mkt-RF', 'SMB', 'HML', 'Mom']] # Carhart factors
     
     # fit regression and calculate expected returns for each stock
+    cols_to_drop = []
     for col in returns.columns:
-        if len(returns[col]) != len(factors):
-            returns.drop(col, axis=1, inplace=True) # drop tickers with missing data
+        stock_returns = returns[col].dropna()
+        
+        if len(stock_returns) != len(factors):
+            cols_to_drop.append(col)
             continue
         else:
             y = returns[col] - factors['RF'] # excess returns
@@ -81,18 +85,22 @@ def pca_fa(
             )
             betas.append(res['params'].values[1:].tolist())
             mse.append(res['mse'])
-            
+            alphas.append(res['params']['const'])
+    
+    # drop columns with missing data
+    filtered_returns = returns.drop(cols_to_drop, axis=1)
+    
     # convert expected returns to dataframe
     df = pd.DataFrame(
-        [expected_returns, betas, mse],
-        index=['expected return', 'betas', 'mse'],
-        columns=returns.columns
+        [expected_returns, betas, mse, alphas],
+        index=['expected return', 'beta', 'mse', 'alpha'],
+        columns=filtered_returns.columns
     ).T
     num_stocks = len(df)
 
     # pca on returns
-    returns = daily_to_monthly(returns) # convert to monthly returns
-    pca_res = pca(returns)
+    filtered_returns = daily_to_monthly(filtered_returns) # convert to monthly returns
+    pca_res = pca(filtered_returns)
     num_pcs = np.argmax(np.cumsum(pca_res['variance']) > pc_variance_threshold) + 1
     reduced_loadings = pca_res['loadings'].iloc[:num_pcs, :]
     
@@ -106,7 +114,11 @@ def pca_fa(
     selected_stocks = []
     for i in range(num_clusters):
         cluster = df[df['label'] == i]
-        positive_returns = cluster[cluster['expected return'] > 0].copy()
+        # select stocks with expected return > 1%
+        positive_returns = cluster[
+            (cluster['expected return'] > 0.01) &
+            (cluster['alpha'] > 0)
+        ].copy()
         
         for i in range(tickers_per_cluster):
             if positive_returns.empty:
@@ -119,7 +131,7 @@ def pca_fa(
     
     # compute covariance matrix
     sigma_f = np.cov(x.T) # sample cov matrix of factors
-    beta_matrix = np.array(df.loc[selected_stocks]['betas'].to_list())
+    beta_matrix = np.array(df.loc[selected_stocks]['beta'].to_list())
     sigma_e = np.diag(df.loc[selected_stocks]['mse'].to_list())
     
     cov_matrix = beta_matrix @ sigma_f @ beta_matrix.T + sigma_e
