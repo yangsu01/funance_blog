@@ -1,10 +1,10 @@
 Hey.
 
-As mentioned previously, I will be changing up the structure of future posts, starting with this one.
+As mentioned, I will be changing up the structure of future posts, starting with this one.
 
-I started writing this blog to document my process as I learn about quantitative finance and share any interesting insights. In the past, I tried to provide justification/proof for every theory and equation but that just ended up burning me out. Besides, you can just read a textbook or google the terminology to get all the explanation you need. The focus now will be on implementation. I will still provide links to further information if needed.
+I started writing this blog to document my process as I learn about quantitative finance and share any interesting insights. In the past, I tried to provide justification/proof for every theory and equation but that just ended up burning me out. Besides, you can just read a textbook or google the terminology to get all the explanations you need. The focus now will be on implementation. I will still provide links to further information if needed.
 
-So today, lets develop an investment strategy. Before going into any detail, I'll first clarify the objectives I'm trying to achieve:
+So today, let's develop an investment strategy. Before going into any detail, I'll first clarify the objectives I'm trying to achieve:
 
 1. Prioritize growth and potential returns
 2. Diversify and capture overall market trends
@@ -12,7 +12,7 @@ So today, lets develop an investment strategy. Before going into any detail, I'l
 
 ## 1 Prioritizing Growth
 
-This basically just means we want to select stocks with high potential returns. There are many ways to do this, but I ended up going with factor models. The overall approach will be similar to the one outlined in my [Investing Using CAPM](https://www.funance.lol/blog/77URiX6i0DSoEfOOtDUjv9/capm-regression) post and a lot of the intuition is explained there.
+This just means we want to select stocks with high potential returns. There are many ways to do this, but I went with factor models. The overall approach will be similar to the one outlined in my [Investing Using CAPM](https://www.funance.lol/blog/77URiX6i0DSoEfOOtDUjv9/capm-regression) post and the intuition is explained there.
 
 ### 1.1 Factor Models
 
@@ -82,12 +82,12 @@ _Figure 2. Loadings of First 3 Principal Components Obtained from Stocks in Dow 
 Let's try to interpret this plot.
 
 - **PC1** can be thought of as the **overall market trend** since all stocks have similar loadings
-- **PC2** shows the highest loadings on _Apple_, _Amazon_, _Salesforce_, _Microsoft_... So maybe this is captures the **tech/software trends**
+- **PC2** shows the highest loadings on _Apple_, _Amazon_, _Salesforce_, _Microsoft_... So maybe this captures the **tech/software trends**
 - **PC3** is a bit harder to interpret, but the highest loadings are either pharmaceuticals or consumer products which are all consumer facing companies. So maybe it captures the **consumer trends**
 
 ### 2.2 Clustering
 
-Now we need to define the selection criteria using the PCs. The simplest way is to look at each principal component and choose stocks with the highest loadings. However, this does not take into account correlation and expected returns (we don't want to select stocks that are expected to lose money...)
+Now we need to define the selection criteria. The simplest way is to look at each principal component and choose stocks with the highest loadings. However, this does not take into account correlation and expected returns (we don't want to select stocks that are expected to lose money...)
 
 The solution is to use clustering to group stocks into clusters, then select stocks with the highest expected returns from each cluster.
 
@@ -97,7 +97,7 @@ I decided to use `K-Mean Clustering` which is a method that clusters data by min
 
 Finally, with the selected stocks and forecasted expected values, we can use Modern Portfolio Theory to calculate the optimal weights (read more about MPT [here](https://www.funance.lol/blog/35i6akI5V1EbX3F8V58WJq/portfolio-construction)).
 
-The inputs of MPT is the expected returns and volatility (in the form of the covariance matrix) of each stock. In the past, I used the sample covariance matrix of the returns while here I'll use a slightly different approach...
+The inputs of MPT are the expected returns and volatility (in the form of the covariance matrix) of each stock. In the past, I used the sample covariance matrix of the returns while here I'll use a slightly different approach...
 
 We can first represent _equation 1_ in matrix form as:
 
@@ -115,7 +115,7 @@ $$
 
 Where $\bm{\Sigma}_R$ is the covariance matrix of returns (one of the inputs for MPT), $\bm{\beta}$ is the matrix of regression coefficients (without the intercept), $\bm{\Sigma}_F$ is the sample covariance matrix of the factors, and $\bm{\Sigma_{\epsilon}}$ is the diagonal matrix of mean squared errors. I omitted the derivation of this equation but trust me bro, the math works out.
 
-The advantage of using this approach over directly using the sample covariance matrix is accuracy (supposedly). We usually have $n >> p$ (number of stocks >> number of factors). So when calculating the sample covariance matrix, there could be more error due to the size of the dataset. Using _equation 3_ on the other hand only requires a covariance matrix of pxp factors, which is a 4x4 matrix in our case. The main issue here is the assumption that $\bm{\Sigma_{\epsilon}}$ is diagonal. This requires the mean squared error (MSE) of each stock to be uncorrelated.
+The advantage of this approach over directly using the sample covariance matrix is accuracy (supposedly). We usually have $n >> p$ (number of stocks >> number of factors). So when calculating the sample covariance matrix, there could be more error due to the size of the dataset. Using _equation 3_ on the other hand only requires a pxp covariance matrix of factors, which is a 4x4 matrix in our case. The main issue here is the assumption that $\bm{\Sigma_{\epsilon}}$ is diagonal. This requires the mean squared error (MSE) of each stock to be uncorrelated.
 
 ## 4 Backtesting
 
@@ -140,9 +140,9 @@ _Figure 3. Histogram of Monthly Portfolio Returns Constructed Using the Trading 
 
 Thats pretty good. Not only did we average positive returns, we also generated an extra _0.49%_ returns per month over the market returns.
 
-Taking a closer look, the results match pretty well with our initial objectives of prioritizing growth while maintaining diversification. This means we take on more risk which you can see from the volatility in the distribution. I mean, theres one month where we underperformed the market by around 24%... And we're talking a flat percentage, so if the market broke even that month, our portfolio lost 24% of its total value. Yikes.
+Taking a closer look, the results match pretty well with our main objective of prioritizing growth. This also means we take on more risk which you can see from the volatility in the distribution. I mean, there's one month where we underperformed the market by around 24%... And we're talking a flat percentage, so if the market broke even that month, our portfolio lost 24% of its total value. Yikes.
 
-But overall, the hope is that over the long term, we average returns above market returns. _0.49%_ might not seem like a lot, but since we are re-balancing our portfolio every month, this _0.49%_ is compounded monthly. And over the last 24 year, I'll look something like this:
+But overall, the goal is that over the long term, we average returns above market returns. 0.49% might not seem like a lot, but since we are re-balancing our portfolio every month, this 0.49% is compounded monthly. And over the last 24 years, It'll look something like this:
 
 ![cum-growth](./figures/cum-growth.png)
 _Figure 4. Cumulative Growth of a Portfolio Constructed Using the Trading Strategy Benchmarked Against the Market (S&P500) Growth_
@@ -162,7 +162,7 @@ _Table 1. Portfolio Performances of Indexing (Buying and Holding S&P500 Index Fu
 
 So would I use this strategy to invest all my money? No. This is just a basic proof-of-concept, theres still a lot more testing to be done before I am comfortable integrating this into my own investing strategies.
 
-How consistent are the backtest results? What if I started/ended at a different time? How sensitive is this model if we tweak some parameters? Can we make it more consistent by adding thresholds? How do different factor models or clustering methods affect the returns? ... Theres still so much work to be done.
+How consistent are the backtest results? What if I started/ended at a different time? How sensitive is this model if we tweak some parameters? Can we make it more consistent by adding thresholds? How do different factor models, clustering, or forecasting methods affect the performance? ... There is still so much work to be done.
 
 The code and some additional visualizations can be found on [GitHub](https://github.com/yangsu01/funance_blog/tree/main/blogs/10-factor-models). Since theres a lot of code in the implementation of the model, I wrote it in a separate script [here](https://github.com/yangsu01/funance_blog/blob/main/src/investing_strategies/pca_fa.py).
 
