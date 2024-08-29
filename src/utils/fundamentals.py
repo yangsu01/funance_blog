@@ -1,86 +1,34 @@
-import yfinance as yf
 import pandas as pd
 
-def get_metrics(ticker: str) -> dict:
-    """Gets fundamental metrics for a given stock ticker
+from .data_loader import get_fundamentals
+
+def compare_to_market(ticker: str, market_tickers: list) -> dict:
+    """ Compares the fundamentals of a stock to the average of the market and sector
 
     Args:
         ticker (str): ticker of the stock
+        market_tickers (list): list of tickers in the market
 
     Returns:
-        dict: {
-            stock_info: {
-                ticker: str,
-                industry: str,
-                sector: str,
-                current_price: float,
-                analyst_low_price: float,
-                analyst_median_price: float,
-                analyst_high_price: float,
-            },
-            
-            metrics: {
-                sector: str,
-                beta: float,
-                risk_rating: float,
-                forward_pe: float,
-                peg_ratio: float,
-                pb_ratio: float,
-                ev_ebitda: float,
-                revenue_growth: float,
-                earnings_growth: float,
-                profit_margin: float,
-                roe: float,
-                cash_per_share: float,
-                short_ratio: float,
-                analyst_median_growth: float,
-                recommendation_mean: float,
-            }
-        }
+        dict: stock info and metrics compared to market and sector
     """
-    stock = yf.Ticker(ticker)
-    info = stock.info
+    info = get_fundamentals(ticker)
+    market_info = calculate_market_sector_mean(market_tickers, info["stock_info"]["sector"])
+    stock_metrics = info['metrics']
+    
+    market_info[ticker] = stock_metrics
+    market_info['Sector Diff'] = (market_info[ticker] - market_info['Sector']) / market_info['Sector']
+    market_info['Market Diff'] = (market_info[ticker] - market_info['Market']) / market_info['Market']
+    market_info = market_info[[ticker, 'Sector', 'Sector Diff', 'Market', 'Market Diff']]
     
     return {
-        'stock_info': {
-            'ticker': ticker,
-            'industry': info.get('industry', 'n/a'),
-            'sector': info.get('sector', 'n/a'),
-            'current_price': info.get('currentPrice', None),
-            'analyst_low_price': info.get('targetLowPrice', None),
-            'analyst_median_price': info.get('targetMedianPrice', None),
-            'analyst_high_price': info.get('targetHighPrice', None),
-        },
-        
-        'metrics': {
-            'sector': info.get('sector', 'n/a'),
-            
-            # risk metrics
-            'beta': info.get('beta', 1), # market risk (lower = less risky)
-            'risk_rating': info.get('overallRisk', None), # risk rating out of 10 (lower = better)
-            
-            # valuation metrics
-            'forward_pe': info.get('forwardPE', None), # projected price to earnings (lower = better)
-            'peg_ratio': info.get('trailingPegRatio', None), # price to earnings adjusted for growth (lower = better, ideally < 1)
-            'pb_ratio': info.get('priceToBook', None), # price to book ratio (lower = better)
-            'ev_ebitda': info.get('enterpriseToEbitda', None), # enterprise value to ebitda (lower = better)
-            
-            # growth metrics
-            'revenue_growth': info.get('revenueGrowth', None), # percent growth in revenue (higher = better)
-            'earnings_growth': info.get('earningsGrowth', None), # percent growth in earnings (higher = better)
-            
-            # profitability metrics
-            'profit_margin': info.get('profitMargins', None), # percent of revenue that is profit (higher = better)
-            'roe': info.get('returnOnEquity', None), # percent return on equity (higher = better)
-            
-            # financial health metrics
-            'cash_per_share': info.get('totalCashPerShare', None), # cash per share (higher = better)
-            'short_ratio': info.get('shortRatio', None), # number of days to cover short positions (lower = better)
-            
-            # analyst expectations. take it with a grain of salt
-            'analyst_median_growth': round(100*(info.get('targetMedianPrice', 0)/info.get('currentPrice', 1) - 1), 2),
-            'recommendation_mean': info.get('recommendationMean', None), # 1 to 5, with 1 being a strong buy and 5 being a strong sell
-        }
+        'stock_info': info['stock_info'],
+        'risk_metrics': market_info.loc[['beta', 'risk_rating']],
+        'valuation_metrics': market_info.loc[['forward_pe', 'peg_ratio', 'pb_ratio', 'ev_ebitda']],
+        'growth_metrics': market_info.loc[['revenue_growth', 'earnings_growth']],
+        'profitability_metrics': market_info.loc[['profit_margin', 'roe']],
+        'financial_health_metrics': market_info.loc[['cash_per_share', 'short_ratio']],
+        'analyst_expectations': market_info.loc[['analyst_median_growth', 'recommendation_mean']],
     }
     
 def calculate_market_sector_mean(tickers: list, sector: str) -> pd.DataFrame:

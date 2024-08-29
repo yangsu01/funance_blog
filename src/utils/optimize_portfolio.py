@@ -17,7 +17,7 @@ def optimize_portfolio(
         bounds (list, optional): constraints on each weight (min, max). Defaults to None.
 
     Returns:
-        np.array: weights and expected return of tangent portfolio
+        Tuple[np.array, float]: weights of assets in portfolio, expected return of portfolio
     """
     n_assets = len(expected_returns)
     
