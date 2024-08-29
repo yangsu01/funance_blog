@@ -147,6 +147,10 @@ class PCA_FA(Strategy):
                 selected_stocks.append(stock)
                 positive_returns.drop(stock, inplace=True)
         
+        # if no stocks selected, return empty allocation
+        if not selected_stocks:
+            return {}
+        
         asset_returns = df.loc[selected_stocks]['expected return'].to_list()
         
         # compute covariance matrix

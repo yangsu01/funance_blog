@@ -58,7 +58,7 @@ class Backtest:
             
             self.portfolios.append({
                 'purchase_date': fit_end,
-                'prediction_date': test_dates[i+1],
+                'prediction_date': test_dates[i+1].strftime('%Y-%m-%d'),
                 'portfolio': allocation
             })
             print(f'Test {i+1}/{len(test_dates)-1} complete')
@@ -68,8 +68,15 @@ class Backtest:
             tickers = list(portfolio['portfolio'].keys())
             weights = list(portfolio['portfolio'].values())
             
-            start_price = self.data.loc[portfolio['purchase_date'], tickers]
-            end_price = self.data.loc[portfolio['prediction_date'], tickers]
+            # if no stocks selected, skip
+            if not tickers:
+                self.portfolio_values.append(self.portfolio_values[-1])
+                self.portfolio_returns.append(0)
+                continue
+            
+            holding_period = self.data.loc[portfolio['purchase_date']:portfolio['prediction_date'], tickers]
+            start_price = holding_period.iloc[0]
+            end_price = holding_period.iloc[-1]
             actual_returns = (end_price - start_price) / start_price
             
             self.portfolio_values.append(
@@ -81,7 +88,7 @@ class Backtest:
             )
         
         total_returns = (self.portfolio_values[-1] - self.portfolio_values[0]) / self.portfolio_values[0]
-        average_returns = gmean(self.portfolio_returns + 1) - 1
+        average_returns = gmean(np.array(self.portfolio_returns) + 1) - 1
         
         if self.trading_freq == 'D':
             annual_returns = (1+average_returns)**252 - 1
