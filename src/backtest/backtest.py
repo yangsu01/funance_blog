@@ -74,13 +74,16 @@ class Backtest:
                 self.portfolio_returns.append(0)
                 continue
             
-            holding_period = self.data.loc[portfolio['purchase_date']:portfolio['prediction_date'], tickers]
+            holding_period = self.data.loc[
+                portfolio['purchase_date']:portfolio['prediction_date'], 
+                tickers
+            ]
             start_price = holding_period.iloc[0]
             end_price = holding_period.iloc[-1]
             actual_returns = (end_price - start_price) / start_price
             
             self.portfolio_values.append(
-                self.portfolio_values[-1] * np.dot(weights, actual_returns)
+                self.portfolio_values[-1] * (1 + np.dot(weights, actual_returns))
             )
             
             self.portfolio_returns.append(
@@ -113,7 +116,8 @@ class Backtest:
             'annual_std': annual_std,
             'sharpe_ratio': sharpe_ratio,
             'portfolio_history': self.portfolio_values,
-            'returns_history': self.portfolio_returns
+            'returns_history': self.portfolio_returns,
+            'portfolios': self.portfolios
         }
     
     def plot_performance(self):
