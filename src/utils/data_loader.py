@@ -111,3 +111,20 @@ def get_tickers(filename: str) -> list:
         list: list of stock tickers
     """
     return pd.read_csv(f'../data/{filename}.csv')['ticker'].tolist()
+
+
+def get_risk_free_rate(start_date: str, end_date: str) -> pd.Series:
+    """Gets the risk-free rate for a given time period
+        Uses the 10 year treasury yield as a proxy
+
+    Args:
+        start_date (str): start date for the risk-free rate
+        end_date (str): end date for the risk-free rate
+
+    Returns:
+        pd.Series: risk-free rate for the given time period
+    """
+    treasury = yf.Ticker('^TNX')
+    data = treasury.history(start=start_date, end=end_date)
+    
+    return data['Close']/100
