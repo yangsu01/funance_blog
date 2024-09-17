@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
-from matplotlib import pyplot as plt
 from scipy.stats import gmean
 
 from ..strategies import Strategy
 
-class Backtest:
+class BacktestAllocator:
     def __init__(
         self,
         strategy: Strategy,
