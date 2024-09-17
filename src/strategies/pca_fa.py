@@ -173,3 +173,6 @@ class PCA_FA(Strategy):
         allocation = {k: v for k, v in allocation.items() if v > 0}
         
         return allocation
+
+    def generate_signals(self, _):
+        raise NotImplementedError('This strategy does not generate trading signals')
