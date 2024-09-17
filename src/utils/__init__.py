@@ -4,3 +4,4 @@ from .stats import *
 from .fundamentals import *
 from .tools import *
 from .data_loader import *
+from .plotting import *
