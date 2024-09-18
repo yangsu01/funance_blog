@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-from typing import Tuple
 
 class Strategy(ABC):
     @abstractmethod
@@ -16,14 +15,14 @@ class Strategy(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def generate_signals(self, data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """ Generates trading signals for each stock based on the strategy
+    def generate_signals(self, data: pd.Series) -> pd.Series:
+        """ Generates trading signals for a stock based on the strategy
             1: long, -1: short, 0: exit, 2: hold
 
         Args:
-            data (pd.DataFrame): historical data of stocks for generating signals
+            data (pd.Series): historical data of stock for generating signals
 
         Returns:
-            Tuple[pd.DataFrame, pd.DataFrame]: signals and weights for each stock
+            pd.Series: signals for the stock
         """
         raise NotImplementedError
