@@ -4,7 +4,7 @@ from scipy.stats import gmean
 from typing import Tuple, List, Dict
 
 from ..strategies import Strategy
-from ..utils import plot_time_series, plot_returns_distribution, get_risk_free_rate
+from ..utils import plot_time_series, plot_returns_distribution, get_risk_free_rate, max_drawdown
 
 class BacktestTrader:
     def __init__(
@@ -138,12 +138,17 @@ class BacktestTrader:
             annual_std = np.std(returns_data)
         
         sharpe_ratio = (annual_returns - risk_free_rate.mean()) / annual_std
+        skew = returns_data.skew()
+        kurtosis = returns_data.kurtosis()
         
         return {
             'average_returns': average_returns,
             'annual_returns': annual_returns,
             'annual_std': annual_std,
             'sharpe_ratio': sharpe_ratio,
+            'skew': skew,
+            'kurtosis': kurtosis,
+            'max_drawdown': max_drawdown(returns_data),
         }
         
     
