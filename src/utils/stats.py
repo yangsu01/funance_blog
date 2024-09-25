@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.decomposition import PCA
 from statsmodels.api import add_constant, OLS
 from statsmodels.tsa.arima.model import ARIMA
@@ -130,3 +131,19 @@ def cluster_kmeans(data: pd.DataFrame, max_clusters: int) -> dict:
         'optimal_labels': optimal_labels,
         'optimal_clusters': optimal_clusters
     }
+    
+
+def max_drawdown(data: pd.Series) -> float:
+    """Calculates the maximum drawdown of a time series
+
+    Args:
+        data (pd.Series): time series data
+
+    Returns:
+        float: maximum drawdown
+    """
+    cumulative_returns = (1 + data).cumprod()
+    cumulative_max = np.maximum.accumulate(cumulative_returns.values)
+    drawdown = (cumulative_returns - cumulative_max) / cumulative_max
+    
+    return drawdown.min()
