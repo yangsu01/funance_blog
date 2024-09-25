@@ -37,14 +37,17 @@ def plot_returns_distribution(
         title (str): title of the plot
     """
     mean = np.mean(data)
+    std = np.std(data)
     kde = stats.gaussian_kde(data)
     x_values = np.linspace(min(data), max(data), 1000)
     kde_values = kde(x_values)
+    normal_values = stats.norm.pdf(x_values, mean, std)
 
     fig, axs = plt.subplots(2, 1, figsize=(10, 10))
     # histogram and KDE
     axs[0].hist(data, bins=hist_bins, density=True, edgecolor='black')
-    axs[0].plot(x_values, kde_values, color='blue', alpha=0.7, label='Kernel Density Estimation')
+    axs[0].plot(x_values, normal_values, color='blue', linestyle='--', label='Normal Distribution')
+    axs[0].plot(x_values, kde_values, color='magenta', linestyle='--', label='Kernel Density Estimation')
     axs[0].axvline(mean, color='red', linestyle='--', label=f'Mean Returns: {100*mean:.4f}%')
     axs[0].set_xlabel('Daily Returns')
     axs[0].set_ylabel('Frequency')
