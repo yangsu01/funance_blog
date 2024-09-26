@@ -16,7 +16,7 @@ $$
 
 Where $P_t$ is the price at time $t$ and $N$ is the number of periods in the lookback window. The difference between EWMA and **simple moving average (SMA)** is that more weight is is put on recent prices ($\alpha P_t + \alpha (1-\alpha) P_{t-1} + \alpha (1-\alpha)^2 P_{t-2} ...$).
 
-The specific signals are as follows:
+The signals are as follows:
 
 - Buy (long) when **short EWMA** crosses above **long EWMA**. This indicates an uptrend in the price
 - Sell (short) when **long EWMA** crosses above **short EWMA**. This indicates a downtrend in the price
@@ -88,5 +88,17 @@ We can dive deeper and look into **risk management** but that will be a topic fo
 ## 3 Robustness of Backtests
 
 Again, you could stop here; we calculated the performance metrics (mean, volatility, Sharpe Ratio) and risk profile (skew, kurtosis) by backtesting the trading rule. Now you can use these values to compare different variations and strategies.
+
+How much can we trust the results from the backtest? Since the data we used was a random sample of the overall population, the metrics we calculated from it are also random samples. Sure, using a large amount of data could minimize some of the error due to the **law of large numbers** but there still may be some underlying bias. Different samples would likely produce different backtested results. How do we know the ones we got are 'realistic'?
+
+While in past posts, I have **walk-forward tests** to achieve this, today, we will look at a more statistical approach: **bootstrapping**.
+
+Specifically, I referring to `non-parametric bootstrapping` which is a resampling method used to generate different price series by sampling the original time series **with replacement** (meaning each datapoint can be sampled multiple times). Since each sample is generated from the original data, it maintains the same distribution. By then applying the backtest to each sample and re-calculating the metrics, we can test the robustness of the trading rule by looking at the cofidence interval and other statistics.
+
+Still with me? Alright, let's walk through the specific steps...
+
+1. Resample historical returns with replacement. *An alternative would be to first fit the data (likely some **t-distribution**) then sample according to the **PDF (probability density function)**. This is known as **parametric bootstrapping**.*
+
+2. 
 
 ## 4 Conclusion
