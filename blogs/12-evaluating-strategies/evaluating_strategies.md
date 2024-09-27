@@ -93,12 +93,60 @@ How much can we trust the results from the backtest? Since the data we used was 
 
 While in past posts, I have **walk-forward tests** to achieve this, today, we will look at a more statistical approach: **bootstrapping**.
 
-Specifically, I referring to `non-parametric bootstrapping` which is a resampling method used to generate different price series by sampling the original time series **with replacement** (meaning each datapoint can be sampled multiple times). Since each sample is generated from the original data, it maintains the same distribution. By then applying the backtest to each sample and re-calculating the metrics, we can test the robustness of the trading rule by looking at the cofidence interval and other statistics.
+Specifically, I am using a `non-parametric stationary bootstrap` to generate different price series while maintaining the underlying trends by sampling the original time series **with replacement** (meaning each data point can be sampled multiple times). Since each new series is generated from the original data, it maintains the same distribution. By then applying the backtest to each sample and re-calculating the metrics, we can test the robustness of the trading rule by looking at the confidence interval and other statistics.
 
-Still with me? Alright, let's walk through the specific steps...
+Still with me? Alright, let me break down the specific steps:
 
-1. Resample historical returns with replacement. *An alternative would be to first fit the data (likely some **t-distribution**) then sample according to the **PDF (probability density function)**. This is known as **parametric bootstrapping**.*
+1. Resample the returns data directly with replacement. _An alternative would be to first fit the data to a distribution (likely some **t-distribution**) then sample according to the **PDF (probability density function)**. This is known as **parametric bootstrapping**._
+2. To preserve the trends in the data, sample blocks of adjacent datapoints at a time. Randomize the length of each block to avoid creating any artificial trends. This is called a **stationary bootstrap**.
+3. Using the randomly sampled returns, reconstruct a price series using the **cumulative product**.
+4. Run the backtest on each reconstructed price series and record the calculated metrics.
+5. Analyze the distribution of each metric to evaluate the robustness of the trading rule.
 
-2. 
+Heres an example of the resampled price series after _step 3_:
+
+![bootstrap-price](./figures/resampled-price.png)
+
+_Figure 4. SPY Prices Resampled using Stationary Bootstrap_
+
+The original price series might seem a bit low but considering the compounding of returns, any small difference in average daily returns would result in a large difference over 20+ years. We can check if theres is any bias by looking at the statistics:
+
+|                       | Population Mean | Bootstrap Mean | Bias    | Standard Error | 95 CI                |
+| :-------------------- | :-------------- | :------------- | :------ | :------------- | :------------------- |
+| **Mean Returns**      | 0.0308%         | 0.0317%        | 0.0009% | 0.0138%        | [0.0554%, 0.0044%]   |
+| **Annual Returns**    | 8.082%          | 8.3892%        | 0.3072% | 3.7675%        | [14.9864%, 1.0195%]  |
+| **Annual Volatility** | 19.39%          | 12.97%         | 6.42%   | 0.9067%        | [21.0068%, 17.5161%] |
+| **Sharpe Ratio**      | 0.2439          | 0.2663         | 0.0263  | 0.2036         | [0.6164, -0.1129]    |
+| **Skew**              | -0.0131         | 0.0123         | 0.0254  | 0.2629         | [0.5568, -0.4420]    |
+| **Kurtosis**          | 11.27           | 11.0203        | -0.2497 | 3.5761         | [18.8275, 4.5209]    |
+
+_Table 3 Original Estimates and Bootstrap Results of SPY. Produced using 100 samples_
+
+Actually, the bootstrap does have a slight positive bias. This is probably due large losses in the market being clustered in short time periods such as the 08/09 financial crisis and COVID. As a result, the probability of sampling these losses are lower. The **standard error** and by extension, the **confidence interval** is also quite large... Idk, just something to keep in mind.
+
+The above result was produced using 100 bootstrap samples. Increasing the number the of samples will hopefully increase the accuracy.
+
+Moving on, now I'll go through the whole process but increase the bootstrap samples to 1000. Here's the results of the backtests on the EWMAC rule:
+
+|                       | Population Mean | Bootstrap Mean | Bias     | Standard Error | 95 CI              |
+| :-------------------- | :-------------- | :------------- | :------- | :------------- | :----------------- |
+| **Mean Returns**      | 0.0213%         | 0.0158%        | -0.0055% | 0.0069%        | [0.0293%, 0.0023%] |
+| **Annual Returns**    | 5.514%          | 4.078%         | -1.436%  | 1.814%         | [7.650%, 0.5892%]  |
+| **Annual Volatility** | 11.60%          | 14.83%         | 3.23%    | 1.042%         | [16.61%, 12.52%]   |
+| **Sharpe Ratio**      | 0.1864          | 0.0519         | -0.1345  | 0.1256         | [0.3080, -0.1854]  |
+| **Skew**              | -0.4923         | 0.0023         | 0.4946   | 0.2660         | [0.4661, -0.5554]  |
+| **Kurtosis**          | 5.599           | 20.681         | 15.082   | 6.158          | [31.219, 7.711]    |
+
+_Table 4 Original Estimations and Bootstrap Results of EWMAC Backtest. Produced using 1000 samples_
+
+It looks like our backtest results are too optimistic. The metrics aside from kurtosis all fall within the confidence interval thought so we're not completely off.
+
+While this could be partly due to the high variability in the bootstrap samples, more investigation is required. But I think its safe to conclude that using **EWMAC** with a short window of 16 days and a long window of 64 days to trade **SPY** is not a great strategy.
 
 ## 4 Conclusion
+
+In this post, we outlined a framework to test and evaluate trading rules and investing strategies. This includes using metrics such as the **sharpe ratio** to quantify the expected performance and **skew / kurtosis** to understand the risks. We also used **bootstrapping** to evaluate the robustness of the estimations.
+
+The analysis can be found [here](https://github.com/yangsu01/funance_blog/blob/main/blogs/12-evaluating-strategies/evaluating_strategies.ipynb) and the backtest/bootstrap code [here](https://github.com/yangsu01/funance_blog/blob/main/src/backtest/backtest_trader.py).
+
+I'm tired
