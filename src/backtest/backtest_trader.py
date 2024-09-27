@@ -34,7 +34,7 @@ class BacktestTrader:
         self.borrow_rate = borrow_rate
         self.portfolio_value = pd.Series(dtype=float)
         self.portfolio_returns = pd.Series(dtype=float)
-        self.bootstrap_results = pd.DataFrame(index=['mean', 'median', 'std', '95 upper', '95 lower'])
+        self.bootstrap_results = pd.DataFrame(index=['mean', 'se', '95 upper', '95 lower'])
   
                      
     def _calculate_performance(self, price_data: pd.Series) -> Tuple[pd.Series, pd.Series]:
@@ -192,8 +192,7 @@ class BacktestTrader:
         for key, value in sample_stats.items():
             ci = np.percentile(value, [2.5, 97.5])
             self.bootstrap_results.loc['mean', key] = np.mean(value)
-            self.bootstrap_results.loc['median', key] = np.median(value)
-            self.bootstrap_results.loc['std', key] = np.std(value)
+            self.bootstrap_results.loc['se', key] = np.std(value, ddof=1)
             self.bootstrap_results.loc['95 lower', key] = ci[0]
             self.bootstrap_results.loc['95 upper', key] = ci[1]
         
