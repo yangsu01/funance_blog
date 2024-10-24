@@ -1,20 +1,20 @@
-A few posts ago, we discussed what options are and why someone would want to trade options. I also briefly went over the intuition behind options pricing and gave an example of pricing in discrete time using binomial trees.
+A few posts ago, we discussed what options are and why investors trade options. I also briefly went over the intuition behind arbitrage-free options pricing and gave an example of pricing in discrete time using binomial trees.
 
-Today, we'll go one step further and looking at a more realistic option pricing model in continuous time using the famous **Black-Scholes model**. You can read my previous post on options [here](https://www.funance.lol/blog/51epGWiq1HHy0BLIxpXWQN/options-trading) if you need a refresher.
+Today, we'll go one step further and look at a more realistic option pricing model in continuous time using the famous **Black-Scholes model**. You can read my previous post on options [here](https://www.funance.lol/blog/51epGWiq1HHy0BLIxpXWQN/options-trading) if you need a refresher first.
 
 There will be a healthy amount of math involved so feel free to skip it and focus on the _visualizations_ and insights.
 
 ## 1 Discrete to Continuous Time
 
-The price of an options contract is directly based on the underlying stock price. So before we can model the price of options, we need a way of modelling the stock price.
+The price of an option contract is directly based on the underlying stock price. So before we can model the price of options, we need a way of modeling the stock price.
 
-In discrete time, stock prices are modelled using binomial trees (a type of random walk) where at each node, the price could either increase by a factor of $u$ or decrease by a factor of $d$. Taking the limit as the number of time steps approaches infinity, we get the continuous time equivalent: `Geometric Brownian Motion`, defined as the following `stochastic differential equation (SDE)`:
+In discrete time, stock prices are modeled using binomial trees (a type of random walk) where at each node, the price could either increase by a factor of $u$ or decrease by a factor of $d$. Taking the limit of binomial trees as the number of time steps approaches infinity, we get the continuous time equivalent: `Geometric Brownian Motion (GBM)`, defined as the following `stochastic differential equation (SDE)`:
 
 $$
 dS_t = \mu S_t dt + \sigma S_t dW_t \enspace (1)
 $$
 
-Where $S_t$ is a time dependent stochastic process (stock price), $\mu$ is the drift term (expected returns), $\sigma$ is the dispersion (volatility), and $dW_t$ is the time derivative of a standard brownian motion:
+Where $S_t$ is a time-dependent stochastic process (stock price), $\mu$ is the drift term (expected returns), $\sigma$ is the dispersion (volatility), and $dW_t$ is the time derivative of a standard Brownian motion:
 
 $$
 dW_t = Z \sqrt{dt} \enspace (2)
@@ -34,21 +34,18 @@ $$
 W_t = \int_{0}^{t} dW \approx \sum_{i=1}^{t} Z_i \sqrt{dt} \enspace(4)
 $$
 
-The second part of the equation is the numerical approximation which I will be implementing in _Python_.
+The second part of _equation 4_ is a numerical approximation which I will be implementing in _Python_.
 
 Alright, let's run some simulations to visualize everything so far.
 
 ![gbm-simulations](./figures/gbm.png)
-_Figure 1. Sensitivity Analysis Geometric Brownian Motion Parameters_
+_Figure 1. Sensitivity Analysis of Geometric Brownian Motion Parameters_
 
-From the sensitivity analysis, we can observe:
-
-- $\mu, \sigma$ are analogous to the `expected returns` and `volatility` of the stock.
-- The stock price cannot be negative.
+In _figure 1_, notice how changes in $\sigma$ causes the simulated prices to spread out, analogous to volatility while $\mu$ adds an overall trend to the prices similar to expected returns. GBM models continuous price changes and captures both the expected returns and volatility of a stock.
 
 ## 2 The Black-Scholes Equation
 
-I wont be showing the derivation of the Black-Scholes equation, but heres a [video](https://youtu.be/-qa2B_sCpZQ?si=oKMJhJcFiLNvgYYQ) if your're curious. Or better yet, read the [original paper](https://www.cs.princeton.edu/courses/archive/fall09/cos323/papers/black_scholes73.pdf). I would also highly recommend watching this [video](https://youtu.be/A5w-dEgIU1M?si=YqR8NPnIXxwxhP6M) on why the equation is so groundbreaking.
+I won't be showing the derivation of the Black-Scholes equation, but here's a [video](https://youtu.be/-qa2B_sCpZQ?si=oKMJhJcFiLNvgYYQ) if you're curious. Or better yet, read the [original paper](https://www.cs.princeton.edu/courses/archive/fall09/cos323/papers/black_scholes73.pdf). I would also highly recommend watching this [video](https://youtu.be/A5w-dEgIU1M?si=YqR8NPnIXxwxhP6M) on why the equation is so groundbreaking.
 
 The `Black-Scholes equation` is a parabolic PDE (similar to the heat equation) that models the price $V(S,t)$ of a European option. It's given by:
 
@@ -56,14 +53,16 @@ $$
 \frac{\partial V}{\partial t} + \frac{\sigma^2}{2} S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0 \enspace (5)
 $$
 
-Where $S = S_t$ is the price of the underlying stock, $r$ is the risk free (interest) rate, and $\sigma$ is the volatility of stock.
+Where $S = S_t$ is the price of the underlying stock, $r$ is the risk-free (interest) rate, and $\sigma$ is the volatility of the stock.
 
 The main assumptions include:
 
-- The risk free rate and volatility, $r, \sigma$ are constant.
-- The underlying stock follows a 1D Geometric Brownian Motion. This means that the stock returns follows a log-normal distribution.
+- The risk-free rate and volatility, $r, \sigma$ are constant.
+- The underlying stock follows a 1D geometric Brownian motion. This means that the stock returns follow a log-normal distribution.
 - There are no transaction fees and the stock does not pay dividends.
 - The option can only be exercised at expiration (European option).
+
+Due to the limitations of these assumptions, the Black-Scholes model is often used as a benchmark.
 
 The Black-Scholes PDE is pretty hard to interpret by itself so we first need to solve it. For a European Call, $V(S, T) = C(S, t)$ with maturity $T$, we can apply the **boundary conditions**:
 
@@ -81,7 +80,7 @@ $$
 C(S, T) = \text{max}(S-K, 0) \enspace (8)
 $$
 
-**tl;dr**: The boundary conditions basically says: the call option is worthless if the stock is worthless, and that as the stock price grows, call is likely to be exercised where its value will be $S-K$ (remember the **payoff diagram** of a long call). The initial condition says: at maturity $t=T$, the option will be worth $S-K$ if the stock price exceeds the exercise price, or 0 if the stock price is below the exercise price. Since its easier to calculate the options price at maturity, we are actually working backwards in time. This is why $(T- t)$, or 'time until maturity' is used.
+**tl;dr**: The boundary conditions say that the call option is worthless if the stock is worthless, and that as the stock price grows, the call is likely to be exercised where its value will be $S-K$ (remember the **payoff diagram** of a long call).
 
 Solving the Black-Scholes PDE for a European Call, we get:
 
@@ -99,7 +98,7 @@ $$
 
 Where $\Phi$ is the **cumulative distribution function (CDF)** of the standard normal distribution. It is also convention to use 'years' as the units for time.
 
-Notice how $C$ does not depend on the expected returns $\mu$ of the underlying stock, and only depends on variables that can be directly calculated (maybe not volatility), making it fairly straightforward to implement numerically.
+Notice how $C$ does not depend on the expected returns $\mu$ of the underlying stock (it assumes risk-neutral probabilities, read more [here](https://www.investopedia.com/terms/r/risk-neutral-probabilities.asp)), and only depends on variables that can be directly calculated (maybe not volatility), making it fairly straightforward to implement numerically.
 
 ### 2.1 Sensitivity Analysis
 
@@ -110,14 +109,14 @@ _Figure 2. Sensitivity Analysis of Parameters for an ITM Black-Scholes Call Opti
 
 Let's break it down:
 
-- Stock price has a positive and relatively linear relationship with call price, given that the option is in-the-money ($S > K$). If it is out-of-the-money ($S < K$), then the call option is basically worthless. The plot is very similar to the payoff diagram of a long call.
+- The stock price has a positive relationship with the call price, given that the option is in-the-money ($S > K$). If it is out-of-the-money ($S < K$), then the call option is basically worthless. The plot is very similar to the payoff diagram of a long call.
 - More time until expiration means the stock price has more time to change, so the call price is higher. At maturity ($t=T$), the price converges to ($S-K$), as described by _equation 8_.
 - The risk free (interest) rate also has a positive relationship due to the **present value of money**.
 - Volatile stocks have higher growth potential so the option price will be higher.
 
 ### 2.2 Implied Volatility
 
-Another interesting thing we can do is to calculate the price of a call option and compare it to the price listed on an options chain. I will use **NVDA - NVIDIA Corp**.
+Another interesting thing we can do is to calculate the price of a call option and compare it to the price listed on the options chain. I will use **NVDA - NVIDIA Corp** as an example.
 
 The current price of **NVDA** is \$139.56, looking at the options chain, I selected the call option with a strike price of $K=\$130$ and expire date of Dec. 20, 2024. This means that $(T-t) = 44/252$ (There are 44 trading days left till expiration and 252 trading days in a year). Lastly, we need to find $\sigma$ which I calculated using the standard deviation of returns over the last year. Plugging everything into _equation 9_, we get:
 
@@ -126,9 +125,9 @@ The current price of **NVDA** is \$139.56, looking at the options chain, I selec
 
 Close, but we're a bit off. The main difference here likely lies in the calculation of volatility.
 
-Since we have the actual price of the call option, we can go backwards and find the 'actual' volatility of NVDA. This is know as the `implied volatility (IV)` and its reflects the market's expectation of the volatility of the underlying stock from now until the expiration of the option. Basically, IV can help us understand the **market sentiment** around the underlying stock. A high IV suggests the market expects large price movements (this could be up or down), while a low IV suggests more stable prices. Note that implied volatility is not constant across all option contracts for a given stock.
+Since we have the actual price of the call option, we can go backward and find the 'actual' volatility of NVDA. This is known as the `implied volatility (IV)` and it reflects the market's expectation of the volatility of the underlying stock from now until the expiration of the option. IV can help us understand **market sentiment** around the underlying stock. A high IV suggests the market expects large price movements (up or down), while a low IV suggests more stable prices. Note that implied volatility is not constant across all option contracts for a given stock.
 
-To calculate IV, we just need to invert _equation 9_. While there is no explicit form for $\sigma$, we can use a root finding optimization method to approximate the numerical solution. I used the Brent's method (`brentq`) in the `scipy` library.
+To calculate IV, we just need to invert _equation 9_. While there is no explicit form for $\sigma$, we can use a root-finding optimization method to approximate the numerical solution. I used the Brent's method (`brentq`) in the `scipy` library.
 
 - Initial calculation of volatility: **0.5194**
 - Calculated implied volatility: **0.5538**
@@ -147,7 +146,7 @@ Using geometric brownian motion, I simulated one stock that had a positive retur
 ![leverage](./figures/leverage.png)
 _Figure 3. Returns of ITM and OTM Call Options VS Underlying Stock Returns_
 
-Any small changes in the underlying stock price gets amplified. This could make you a lot of money but if the stock price falls below the strike price even by a small amount, the price of the call option plummets.
+See how any small changes in the underlying stock price get amplified? This could make you a lot of money but if the stock price falls below the strike price even by a small amount, the price of the call option plummets.
 
 Totally not gambling.
 
@@ -163,7 +162,7 @@ $$
 
 `Delta` $\Delta$ tells us how much the call price changes with a \$1 change in the underlying stock price. So if $\Delta = 0.5$, then a \$1 increase in the stock price causes the price of the call to increase by \$0.5. Puts have negative deltas since they move in the opposite direction of the stock price.
 
-So if you short a call option that covers 100 shares, you hedge this position by buying $\Delta*100$ shares of the underlying stock. This way, you completely offset any changes in the underlying stock price with changes in the option price. This strategy is known as `Delta hedging`.
+So if you short a call option that covers 100 shares, you would hedge this position by buying $\Delta*100$ shares of the underlying stock. This way, you completely neutralize any changes in the underlying stock price. This strategy is known as `Delta hedging`. In practice, delta hedging is often used by institutional investors and market makers to manage risk.
 
 You can also take the partial derivatives of $C$ with respect to the other parameters $\sigma, (T-t), r$ which will give you the other `Greeks`. [Heres](https://youtu.be/l9ta2nLXoao?si=_6oUvMl9xbFImjGz) a video if you're interested.
 
@@ -191,18 +190,20 @@ Beautiful.
 
 Delta is not constant through time, so we would need to periodically adjust the number of shares of the underlying stock we hold to maintain a `delta neutral` position. This is known as `dynamic delta hedging`. For simplicity, I will assume we adjust every day and there are no transaction fees.
 
-I will now explain how I calculated everything. Skip to the plot if you'd like.
+_I will now explain how I calculated everything. Skip to the plot if you'd like._
 
 Here is an example of how I calculated the returns of the delta hedged portfolio:
 
 ![cashflow](./figures/delta-hedge-cashflow.jpg)
 _Figure 4. Cashflow of Delta Hedged Portfolio_
 
+Basically, we need to keep track of the cashflows as we buy and sell stocks as well as any interest paid from borrowing.
+
 On the first day, I sell a call option for 100 shares of the underlying stock at 100\*6.18 = \$61.8. I calculate the delta (0.67) and buy 67 shares of the underlying stock. I assume these initial transactions are done using my own money so I don't pay any interest.
 
 Every following day, I recalculate delta and adjust the number of shares I hold. If I need to buy more shares, I borrow money from the bank and pay interest depending on how many days until maturity. If I sell shares, I subtract the amount of interest I would have paid from the total (if that makes any sense...).
 
-On the last day, I exit all my positions. Since I sold calls, I also sell 100 shares to whoever bought my call at the strike price if $S>K$.
+On the last day, I exit all my positions. Since I sold calls, I also need to sell 100 shares to whoever bought my contract at the strike price if $S>K$.
 
 In the end, my total profit would be:
 
@@ -215,13 +216,13 @@ Using geometric brownian motion to simulate a stock with 5\% expected return and
 ![delta-hedge-sim](./figures/delta-hedge-sim.png)
 _Figure 4 Simulated Distribution of Returns of a Dynamic Delta Hedging Strategy_
 
-Delta hedging allows us to minimize the exposure to market risk but doing so also means we will generate returns close to the risk free rate. We basically created a portfolio that behaves like a bond.
+Delta hedging allows us to minimize the exposure to market risk, but doing so also means we generate returns close to the risk-free rate. Basically, we just created a portfolio that behaves like a bond.
 
-Be careful though, this strategy wouldn't work well if the underlying stock was very volatile since there would be a higher change that the call option would be exercised (higher costs for you).
+However, this strategy wouldn't work well if the underlying stock was very volatile since there would be a higher chance that the call option would be exercised (higher costs for you).
 
 ## 4 Conclusions
 
-In this post, we took a closer look at options pricing in continuous time and stock prices could be modelled using geometric brownian motion.
+In this post, we took a closer look at options pricing in continuous time and how stock prices could be modeled using geometric Brownian motion.
 
 Using the black-scholes formula, we looked at how different parameters affected the price of a call option and how implied volatility can be used to understand market sentiment around a stock.
 
