@@ -177,7 +177,7 @@ Where $\phi$ is the **probability density function (PDF)** of the **standard nor
 We can simplify _equation 13_ further by plugging in:
 
 $$
-\phi = \frac{1}{2\pi} e^{x^2/2} \enspace (14)
+\phi = \frac{1}{\sqrt{2\pi}} e^{x^2/2} \enspace (14)
 $$
 
 In the end, we get:
