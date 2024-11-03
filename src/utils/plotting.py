@@ -25,37 +25,57 @@ def plot_time_series(
     plt.grid()
     plt.show()
 
-def plot_returns_distribution(
+def plot_dist(
     data: pd.Series,
     title: str,
+    dist: str='norm',
     hist_bins: int=50,
+    hist_title: str='Stock Returns',
+    hist_xlabel: str='Returns',
 ) -> None:
     """ Plot histogram/KDE and normal QQ plot of data
 
     Args:
         data (pd.Series): data to plot
         title (str): title of the plot
+        distribution (str, optional): distribution to compare to (norm, t). Defaults to 'norm'.
+        hist_bins (int, optional): number of bins for the histogram. Defaults to 50.
     """
-    mean = np.mean(data)
-    std = np.std(data)
     kde = stats.gaussian_kde(data)
     x_values = np.linspace(min(data), max(data), 1000)
     kde_values = kde(x_values)
-    normal_values = stats.norm.pdf(x_values, mean, std)
+    
+    if dist == 'norm':
+        mean = np.mean(data)
+        std = np.std(data)
+        values = stats.norm.pdf(x_values, mean, std)
+        title_str = title + '\n' + rf' $\mu={mean:.4f}$, $\sigma={std:.4f}$'
+    
+    elif dist == 't':
+        df, loc, scale = stats.t.fit(data)
+        values = stats.t.pdf(x_values, df, loc, scale)
+        title_str = title + '\n' + rf'$\nu={df:.4f}$, $\mu={loc:.4f}$, $\sigma={scale:.4f}$'
+        
+    else:
+        raise ValueError('Distribution must be "norm" or "t"')
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 10))
+    fig, axs = plt.subplots(1, 2, figsize=(14, 6))
     # histogram and KDE
-    axs[0].hist(data, bins=hist_bins, density=True, edgecolor='black')
-    axs[0].plot(x_values, normal_values, color='blue', linestyle='--', label='Normal Distribution')
-    axs[0].plot(x_values, kde_values, color='magenta', linestyle='--', label='Kernel Density Estimation')
-    axs[0].axvline(mean, color='red', linestyle='--', label=f'Mean Returns: {100*mean:.4f}%')
-    axs[0].set_xlabel('Daily Returns')
-    axs[0].set_ylabel('Frequency')
-    axs[0].set_title('Histogram and KDE')
+    axs[0].hist(data, bins=hist_bins, density=True, alpha=0.8)
+    axs[0].plot(x_values, values, color='blue', linestyle='--', label=dist)
+    axs[0].plot(x_values, kde_values, color='red', linestyle='-.', label='KDE')
+    axs[0].set_xlabel(hist_xlabel)
+    axs[0].set_ylabel('Density')
+    axs[0].set_title(hist_title)
     axs[0].legend()
+    
     # QQ plot
-    stats.probplot(data, dist="norm", plot=axs[1])
-    axs[1].set_title('Normal QQ Plot')
+    if dist == 'norm':
+        stats.probplot(data, plot=axs[1], dist='norm', sparams=(mean, std))
+        axs[1].set_title('Normal Distribution QQ Plot')
+    elif dist == 't':
+        stats.probplot(data, plot=axs[1], dist='t', sparams=(df, loc, scale)) 
+        axs[1].set_title('t-Distribution QQ Plot')
 
-    fig.suptitle(title)
+    fig.suptitle(title_str)
     fig.tight_layout()
