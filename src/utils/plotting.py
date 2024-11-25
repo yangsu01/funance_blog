@@ -54,7 +54,7 @@ def plot_dist(
     elif dist == 't':
         df, loc, scale = stats.t.fit(data)
         values = stats.t.pdf(x_values, df, loc, scale)
-        title_str = title + '\n' + rf'$\nu={df:.4f}$, $\mu={loc:.4f}$, $\sigma={scale:.4f}$'
+        title_str = title + '\n' + rf'$\nu={df:.4f}$, $\mu={loc:.4f}$, $\lambda={scale:.4f}$'
         
     else:
         raise ValueError('Distribution must be "norm" or "t"')
