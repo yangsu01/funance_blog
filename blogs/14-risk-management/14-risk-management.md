@@ -1,12 +1,12 @@
 As retail investors, we tend to focus on the potential upside or profitability (think expected returns, volatility, Sharpe Ratio...) when evaluating assets, portfolios, or trading rules. However, as discussed in my post on [_evaluating investment strategies_](https://www.funance.lol/blog/4ejCfGO8EcB1OF3SUrtFbn/evaluating-strategies), decisions purely based on these metrics can lead to large unexpected losses as financial returns tend to be skewed or have fat tails. Minimizing the impact of these risks can add robustness to our investments and is a core objective of `risk management`.
 
-So today, lets start off by looking at some of the metrics used to quantify risk and how they can be used in our own investment portfolios.
+So today, let's start by looking at some metrics used to quantify risk and how they can be used in our investment portfolios.
 
 ## 1 VaR and ES
 
 The two most widely used metrics in risk management are `Value at Risk (VaR)` and `Expected Shortfall (ES)` (also referred to as `Conditional Value at Risk (CVaR)`).
 
-**VaR** is defined by two parameters, the time horizon $T$ and confidence level $\alpha$. It basically answers the question: _"Over a period of $T$, how much money would I lose in the worst $\alpha$ percent of cases?"_ So if a portfolio has $\text{VaR}(0.01, 1\text{ day}) = \$1000$, then there is a $1\%$ chance of a loss exceeding \$1000 over the next day. Putting this into an equation:
+**VaR** is defined by two parameters, the time horizon $T$ and confidence level $\alpha$. It answers the question: _"Over a period of $T$, how much money would I lose in the worst $\alpha$ percent of cases?"_ So if a portfolio has $\text{VaR}(0.01, 1\text{ day}) = \$1000$, then there is a $1\%$ chance of a loss exceeding \$1000 over the next day. Putting this into an equation:
 
 $$
 P\left[ L \geq \text{VaR}(\alpha) \right] = \alpha \enspace (1)
@@ -22,7 +22,7 @@ $$
 
 ### 1.1 Non-Parametric Estimations
 
-If you have a large amount of data, VaR and ES can be found using a non-parametric estimation where we directly calculate the metrics using historical data.
+If you have a large amount of data, VaR and ES can be found with non-parametric estimation where the metrics are directly calculated using historical data.
 
 Using this method, we can modify _equations 1, 2_ as:
 
@@ -40,26 +40,26 @@ $$
 
 Where $R_i$ is the $i$th return and $I[R_i < \widehat{q}(\alpha)] = 1$ when $R_i < \widehat{q}(\alpha)$ and 0 otherwise. Basically, we are taking the average of all the returns less than $\widehat{q}(\alpha)$.
 
-Using `COST - Costco Wholesale Corporation` as an example, here is the distribution of returns over the last 5 years:
+Using `COST - Costco Wholesale Corporation` as an example, here is the distribution of daily returns over the last 10 years:
 
 ![historical returns](./figures/historical_returns.png)
 
 _Figure 1. Distribution of Returns and Non-Parametric Estimations of VaR and ES. Where S is the position size_
 
-Assuming you held a \$10,000 long position, the VaR and ES for a 1 day period (we are using daily returns) can be found using _equations 3, 4_:
+Assuming you held a \$10,000 long position, the VaR and ES for a 1-day horizon can be found using _equations 3, 4_:
 
 - VaR(0.01) = \$391.80
 - ES(0.01) = \$573.26
 
-So, you would expect a loss greater than \$418.45 1% of days (every 100 trading days). Furthermore, in the worst 1% of days, I expect an average loss of \$617.33.
+So, you would expect a loss greater than \$391.80 1% of days (every 100 trading days). Furthermore, in the worst 1% of days, the average loss would be \$573.26.
 
-VaR and ES allows us to quantify the down side risks associated with investments. Using it, we can compare different alternatives and adjust positions according to our personal `risk tolerance`.
+VaR and ES allow us to quantify the down side risks associated with investments. Using it, we can compare different alternatives and adjust positions according to our personal `risk tolerance`.
 
 Ask yourself: "Would a loss of \$617 in one day impact my day-to-day life? Can I sleep at night if I had a loss greater that \$418 every 5 months?" If the answer is no, then you better reconsider your investments.
 
 ## 2 Parametric Estimations
 
-Another approach to calculating VaR and ES is using a parametric estimation where we first fit the sample data to a known distribution, then calculate the metrics using the fitted parameters. This method works well when theres less data available or in more complex applications (more on this later).
+Another approach to calculating VaR and ES is using a parametric estimation by fitting the sample data to a known distribution, and then calculating the metrics using the fitted parameters. This method works well when there is less data available or in more complex applications (more on this later).
 
 ### 2.1 The t-distribution
 
@@ -70,7 +70,7 @@ _Figure 2. Distribution of Historical Returns Compared to a Normal Distribution_
 
 As expected, we observe heavy tails. Looking at the lower quantiles of the normal QQ plot, the theoretical quantiles of the normal distribution severely underestimate the observed values. So estimating VaR and ES using a normal distribution would lead to overconfidence.
 
-A better alternative would be the `t-distribution` which generalizes the normal distribution by adding an additional parameter that describes the tails known as the `degrees of freedom` $\nu$. To fit the parameters $\mu, \lambda, \nu$, we can use a `maximum likelihood estimation (MLE)` (watch this [video](https://youtu.be/XepXtl9YKwc?si=hUGVuNaQiSW42kkW) to learn more about MLE). Here are the results:
+A better alternative would be the `t-distribution` which generalizes the normal distribution by adding a parameter that describes the tails known as the `degrees of freedom` $\nu$. To fit the parameters $\mu, \lambda, \nu$, we can use a `maximum likelihood estimation (MLE)` (watch this [video](https://youtu.be/XepXtl9YKwc?si=hUGVuNaQiSW42kkW) to learn more about MLE). Here are the results:
 
 ![t-distribution](./figures/t-distribution.png)
 _Figure 3. Distribution of Historical Returns Compared to a t-distribution_
@@ -132,7 +132,7 @@ As mentioned previously, parametric estimations allow us to calculate VaR and ES
 
 Lets assume equal weights.
 
-The method I used estimate VaR and ES is to first approximate the distribution of the overall portfolio returns (assuming its some multivariate t-distribution), then calculate VaR and ES with _equations 6, 7_.
+The method I used to estimate VaR and ES is to approximate the distribution of the overall portfolio returns (assuming it is some multivariate t-distribution), then calculate VaR and ES with _equations 6, 7_.
 
 So we need to estimate $\mu_p, \lambda_p, \nu_p$ of the portfolio. From portfolio theory (read about it [here](https://www.funance.lol/blog/35i6akI5V1EbX3F8V58WJq/portfolio-construction)), we know:
 
@@ -158,7 +158,7 @@ $$
 
 Where $N$ is the total number of assets in the portfolio, and $\nu_i$ is the degrees of freedom of asset $i$.
 
-The reason I used a harmonic mean here is because assets with lower $\nu$ (fatter tails) have a larger influence on the tail of the overall portfolio.
+The reason I used a harmonic mean here is that assets with lower $\nu$ (fatter tails) have a larger influence on the tail of the overall portfolio.
 
 $\lambda_p$ can then be calculated with _equation 5_.
 
