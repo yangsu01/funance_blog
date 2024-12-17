@@ -4,7 +4,7 @@ from scipy.stats import gmean
 from typing import Tuple, List, Dict
 
 from ..strategies import Strategy
-from ..utils import plot_time_series, plot_returns_distribution, get_risk_free_rate, max_drawdown
+from ..utils import plot_time_series, plot_dist, get_risk_free_rate, max_drawdown
 
 class BacktestTrader:
     def __init__(
@@ -247,7 +247,7 @@ class BacktestTrader:
             hist_bins (int, optional): number of bins for histogram. Defaults to 50.
         """
         self._check_backtest_ran
-        plot_returns_distribution(
+        plot_dist(
             self.portfolio_returns,
             title=title,
             hist_bins=hist_bins,
